@@ -59,7 +59,7 @@ void FillArray(int** arr, int rows, int cols, int k) //ф-я заполнения массива да
         else
             continue;
     }
-    for (int p = 0; p < 1;)    //для рандомной 2//////////////////////////////////////
+    for (int p = 0; p < 10;)    //для рандомной 2//////////////////////////////////////
     {
         int randomRow = rand() % rows;
         int randomCol = rand() % cols;
@@ -304,16 +304,34 @@ void EnemyLeft(int** const arr, const int rows, const int cols)
 }
 void RandomEnemyMove(int** const arr, const int rows, const int cols)
 {
-    srand((unsigned int)time(NULL));
-    int randomMove = 1 + rand() % 4; 
-    if (randomMove == 1)
-        EnemyDown(arr, rows, cols);
-    else if (randomMove == 2)
-        EnemyUp(arr, rows, cols);
-    else if (randomMove == 3)
-        EnemyRight(arr, rows, cols);
-    else if (randomMove == 4)
-        EnemyLeft(arr, rows, cols);
+    for (int i = 0; i < rows; i++)
+    {
+        for (int j = 0; j < cols; j++)
+        {
+            if (arr[i][j] == 7)
+            {
+                srand((unsigned int)time(NULL));
+                int randomMove = 1 + rand() % 4;
+                switch (randomMove)
+                {
+                case 1:
+                    EnemyDown(arr, rows, cols);
+                case 2:
+                    EnemyUp(arr, rows, cols);
+                    break;
+                case 3:
+                    EnemyRight(arr, rows, cols);
+                    break;
+
+                case 4:
+                    EnemyLeft(arr, rows, cols);
+                    break;
+                }
+            }
+        }
+    }
+    return;
+
 }
 bool isGameOver(int** const arr, const int rows, const int cols)
 {
@@ -334,7 +352,7 @@ bool isGameOver(int** const arr, const int rows, const int cols)
 int main()
 {
     setlocale(LC_ALL, "");
-    int rows=10, cols=10, k=10, pattern=2;
+    int rows=20, cols=30, k=10, pattern=2;
     int** arr = NULL; //чтобы создать двумерный динамический массив, создаем указатель на массив указателей
     cout << "Введите количество строк и столбцов и число единиц (не равное размеру матрицы - 2): " << endl;    
     //cin >> rows >> cols >> k;
