@@ -3,391 +3,436 @@
 #include<iomanip> //для setw
 #include<ctime> //для генерации случайных чисел
 #include <conio.h> //для _getch()
-using namespace std; 
-int** CreateArray(int rows, int cols) //выделение памяти
-{
-    int** arr = new int* [rows];  //переменная arr будет хранить указатель на указатель  
-            //мы создаем массив указателей, мы здесь будем хранить указатели  
-    for (int i = 0; i < rows; i++)
-    {
-        arr[i] = new int[cols]; /*в каждый элемент который будет хранить указатель на int мы будем присваивать новый динамический массив, размер массива будет соответсвовать переменной colls*/
-        //объявление и создание массива, выделение под него памяти5
-    }
-    return arr;
-}
-void DestroyArray(int** arr, int rows, int cols) //полность удаляем нашу ОП после того как поработаем с нашим массивом и он нам станет ненужен
-{
-    for (int i = 0; i < rows; i++)
-    {
-        delete[]arr[i];
-    }
-    delete[]arr;
-}
-void FillArray(int** arr, int rows, int cols, int k) //ф-я заполнения массива данными, &arr т.к.  ассив меняется и адрес тоже
-{
-    for (int i = 0; i < rows; i++)
-    {
-        for (int j = 0; j < cols; j++)
-        {
-            arr[i][j] = 0;
-        }
-    }
-    srand((unsigned int)time(NULL));
-    for (int p = 0; p < k;)
-    {
-        int randomRow = rand() % rows;
-        int randomCol = rand() % cols;
+using namespace std;
 
-        if (arr[randomRow][randomCol] == 0)
-        {
-            arr[randomRow][randomCol] = 1;
-            p++;
-        }
-        else
-            continue;
-    }
-    for (int p = 0; p < 1;)    //для рандомной 2//////////////////////////////////////
-    {
-        int randomRow = rand() % rows;
-        int randomCol = rand() % cols;
 
-        if (arr[randomRow][randomCol] == 0)
-        {
-            arr[randomRow][randomCol] = 2;
-            p++;
-        }
-        else
-            continue;
-    }
-    for (int p = 0; p < 1;)    //для рандомной 2//////////////////////////////////////
-    {
-        int randomRow = rand() % rows;
-        int randomCol = rand() % cols;
+class Matrix {
+public:
+	Matrix(int rows, int cols);
+	~Matrix();
+	void FillArray(int k);
+	void ShowArray();
+	void ChangeDown();
+	void ChangeUp();
+	void ChangeRight();
+	void ChangeLeft();
+	void EnemyDown();
+	void EnemyUp();
+	void EnemyRight();
+	void EnemyLeft();
+	void RandomEnemyMove();
+	bool isGameOver();
+private:
+	int** arr;//данные
+	int rows, cols;//размеры
+};
 
-        if (arr[randomRow][randomCol] == 0)
-        {
-            arr[randomRow][randomCol] = 7; //enemy
-            p++;
-        }
-        else
-            continue;
-    }
-}
-void ShowArray(int** const arr, const int rows, const int cols) //вывод массива
+Matrix::Matrix(int rows, int cols) //выделение памяти
 {
-    system("cls"); //ф-я очистки экрана (консоли)
-    HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY); //белый
-    for (int j = 0; j <= cols+1; j++)
-    {
-        if ((j==0) || (j==cols+1))
-            cout << "+";
-        else 
-            cout << "--";
-    }
-    cout << endl;
-    for (int i = 0; i < rows; i++)
-    {
-        SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY); //белый
-        cout << "|";
-        for (int j = 0; j < cols; j++)
-        {
-             //для получения дискрипптора
-            if (arr[i][j] == 0)
-            {
-                cout <<"  ";
-            }
-            if (arr[i][j] == 1)
-            {
-                SetConsoleTextAttribute(console, FOREGROUND_GREEN | FOREGROUND_INTENSITY); //зеленые
-                cout << "[]";
-            }
-            if (arr[i][j] == 2)
-            {
-                SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_INTENSITY); //белый
-                cout <<"()";
-            }
-            if (arr[i][j] == 7)
-            {
-                SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY); //синий
-                cout << "**";
-            }
-        }  
-        SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY); //белый
-        cout << "|";
-        cout << endl;//в конце каждой строки будет отвечать за переход на следующую строчку
-    }
-    SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY); //белый
-    for (int j = 0; j <= cols + 1; j++)
-    {
-        if ((j == 0) || (j == cols + 1))
-            cout << "+";
-        else
-            cout << "--";
+	this->rows = rows;
+	this->cols = cols;
+	arr = new int* [rows];  //переменная arr будет хранить указатель на указатель  
+			//мы создаем массив указателей, мы здесь будем хранить указатели  
+	for (int i = 0; i < rows; i++)
+	{
+		arr[i] = new int[cols]; /*в каждый элемент который будет хранить указатель на int мы будем присваивать новый динамический массив, размер массива будет соответсвовать переменной colls*/
+		//объявление и создание массива, выделение под него памяти5
+	}
+}//коонструктор
+Matrix::~Matrix() //полность удаляем нашу ОП после того как поработаем с нашим массивом и он нам станет ненужен
+{
+	for (int i = 0; i < rows; i++)
+	{
+		delete[]arr[i];
+	}
+	delete[]arr;
+}
 
-    }
-    cout << endl;
-    /*cout << "Для продолжения работы программы нажмите любую кнопку ";
-    cin.get();*/
-    cout << endl;
-}
-void ChangeDown(int** const arr, const int rows, const int cols)
+void Matrix::FillArray(int k) //ф-я заполнения массива данными, &arr т.к.  ассив меняется и адрес тоже
 {
-    for (int i = 0; i < rows - 1; i++) // ограничение на последнюю строку (rows - 1), т.к. под последней строкой не может быть эл-ов 
-    {
-        for (int j = 0; j < cols; j++)
-        {
-            if ((arr[i][j] == 2) && (arr[i + 1][j] == 0))
-            {
-                arr[i][j] = 0;
-                arr[i + 1][j] = 2;          
-                return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
-            }
-            if ((arr[i][j] == 2) && (arr[i + 1][j] == 7))
-            {
-                arr[i][j] = 7;
-                arr[i + 1][j] = 0;
-                return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
-            }
-        }
-    }
+	for (int i = 0; i < rows; i++)
+	{
+		for (int j = 0; j < cols; j++)
+		{
+			arr[i][j] = 0;
+		}
+	}
+	//srand((unsigned int)time(NULL));
+	for (int p = 0; p < k;)
+	{
+		int randomRow = rand() % rows;
+		int randomCol = rand() % cols;
+
+		if (arr[randomRow][randomCol] == 0)
+		{
+			arr[randomRow][randomCol] = 1;
+			p++;
+		}
+		else
+			continue;
+	}
+	for (int p = 0; p < 1;)    //для рандомной 2//////////////////////////////////////
+	{
+		int randomRow = rand() % rows;
+		int randomCol = rand() % cols;
+
+		if (arr[randomRow][randomCol] == 0)
+		{
+			arr[randomRow][randomCol] = 2;
+			p++;
+		}
+		else
+			continue;
+	}
+	for (int p = 0; p < 1;)    //для врагов
+	{
+		int randomRow = rand() % rows;
+		int randomCol = rand() % cols;
+
+		if (arr[randomRow][randomCol] == 0)
+		{
+			arr[randomRow][randomCol] = 7; //enemy
+			p++;
+		}
+		else
+			continue;
+	}
 }
-void ChangeUp(int** const arr, const int rows, const int cols)
+void Matrix::ShowArray() //вывод массива
 {
-    for (int i = rows-1; i>0; i--) // ограничение на последнюю строку (rows - 1), т.к. под последней строкой не может быть эл-ов  
-        /*_____число rows меняется_____*/
-    { 
-        for (int j = 0; j < cols; j++)
-        {
-            if ((arr[i][j] == 2) && (arr[i - 1][j] == 0))
-            {
-                arr[i][j] = 0;
-                arr[i - 1][j] = 2;          
-                return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
-            }
-            if ((arr[i][j] == 2) && (arr[i - 1][j] == 7))
-            {
-                arr[i][j] = 7;
-                arr[i - 1][j] = 0;
-                return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
-            }
-        }
-    }
+	system("cls"); //ф-я очистки экрана (консоли)
+	HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY); //белый
+	for (int j = 0; j <= cols + 1; j++)
+	{
+		if ((j == 0) || (j == cols + 1))
+			cout << "+";
+		else
+			cout << "--";
+	}
+	cout << endl;
+	for (int i = 0; i < rows; i++)
+	{
+		SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY); //белый
+		cout << "|";
+		for (int j = 0; j < cols; j++)
+		{
+			//для получения дискрипптора
+			if (arr[i][j] == 0)
+			{
+				cout << "  ";
+			}
+			if (arr[i][j] == 1)
+			{
+				SetConsoleTextAttribute(console, FOREGROUND_GREEN | FOREGROUND_INTENSITY); //зеленые
+				cout << "[]";
+			}
+			if (arr[i][j] == 2)
+			{
+				SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_INTENSITY); //белый
+				cout << "()";
+			}
+			if (arr[i][j] == 7)
+			{
+				SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY); //синий
+				cout << "**";
+			}
+		}
+		SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY); //белый
+		cout << "|";
+		cout << endl;//в конце каждой строки будет отвечать за переход на следующую строчку
+	}
+	SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY); //белый
+	for (int j = 0; j <= cols + 1; j++)
+	{
+		if ((j == 0) || (j == cols + 1))
+			cout << "+";
+		else
+			cout << "--";
+
+	}
+	cout << endl;
+	/*cout << "Для продолжения работы программы нажмите любую кнопку ";
+	cin.get();*/
+	cout << endl;
 }
-void ChangeRight(int** const arr, const int rows, const int cols)
+void Matrix::ChangeDown()
 {
-    for (int i = 0; i < rows; i++) // ограничение на последнюю строку (rows - 1), т.к. под последней строкой не может быть эл-ов 
-    {
-        for (int j = 0; j < cols-1; j++)
-        {
-            if ((arr[i][j] == 2) && (arr[i][j + 1] == 0))
-            {
-                arr[i][j] = 0;
-                arr[i][j + 1] = 2;
-                return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
-            }
-            if ((arr[i][j] == 2) && (arr[i][j + 1] == 7))
-            {
-                arr[i][j] = 7;
-                arr[i][j + 1] = 0;
-                return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
-            }
-        }
-    }
+	for (int i = 0; i < rows - 1; i++) // ограничение на последнюю строку (rows - 1), т.к. под последней строкой не может быть эл-ов 
+	{
+		for (int j = 0; j < cols; j++)
+		{
+			if ((arr[i][j] == 2) && (arr[i + 1][j] == 0))
+			{
+				arr[i][j] = 0;
+				arr[i + 1][j] = 2;
+				return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
+			}
+			if ((arr[i][j] == 2) && (arr[i + 1][j] == 7))
+			{
+				arr[i][j] = 7;
+				arr[i + 1][j] = 0;
+				return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
+			}
+		}
+	}
 }
-void ChangeLeft(int** const arr, const int rows, const int cols)
+void Matrix::ChangeUp()
 {
-    for (int i = 0; i < rows; i++) // ограничение на последнюю строку (rows - 1), т.к. под последней строкой не может быть эл-ов 
-    {
-        for (int j = cols-1; j >0; j--)
-        {
-            if ((arr[i][j] == 2) && (arr[i][j - 1] == 0))
-            {
-                arr[i][j] = 0;
-                arr[i][j - 1] = 2;
-                return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
-            }
-            if ((arr[i][j] == 2) && (arr[i][j - 1] == 7))
-            {
-                arr[i][j] = 7;
-                arr[i][j - 1] = 0;
-                return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
-            }
-        }
-    }
+	for (int i = rows - 1; i > 0; i--) // ограничение на последнюю строку (rows - 1), т.к. под последней строкой не может быть эл-ов  
+		/*_____число rows меняется_____*/
+	{
+		for (int j = 0; j < cols; j++)
+		{
+			if ((arr[i][j] == 2) && (arr[i - 1][j] == 0))
+			{
+				arr[i][j] = 0;
+				arr[i - 1][j] = 2;
+				return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
+			}
+			if ((arr[i][j] == 2) && (arr[i - 1][j] == 7))
+			{
+				arr[i][j] = 7;
+				arr[i - 1][j] = 0;
+				return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
+			}
+		}
+	}
+}
+void Matrix::ChangeRight()
+{
+	for (int i = 0; i < rows; i++) // ограничение на последнюю строку (rows - 1), т.к. под последней строкой не может быть эл-ов 
+	{
+		for (int j = 0; j < cols - 1; j++)
+		{
+			if ((arr[i][j] == 2) && (arr[i][j + 1] == 0))
+			{
+				arr[i][j] = 0;
+				arr[i][j + 1] = 2;
+				return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
+			}
+			if ((arr[i][j] == 2) && (arr[i][j + 1] == 7))
+			{
+				arr[i][j] = 7;
+				arr[i][j + 1] = 0;
+				return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
+			}
+		}
+	}
+}
+void Matrix::ChangeLeft()
+{
+	for (int i = 0; i < rows; i++) // ограничение на последнюю строку (rows - 1), т.к. под последней строкой не может быть эл-ов 
+	{
+		for (int j = cols - 1; j > 0; j--)
+		{
+			if ((arr[i][j] == 2) && (arr[i][j - 1] == 0))
+			{
+				arr[i][j] = 0;
+				arr[i][j - 1] = 2;
+				return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
+			}
+			if ((arr[i][j] == 2) && (arr[i][j - 1] == 7))
+			{
+				arr[i][j] = 7;
+				arr[i][j - 1] = 0;
+				return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
+			}
+		}
+	}
 }
 //Enemy
-void EnemyDown(int** const arr, const int rows, const int cols)
+void Matrix::EnemyDown()
 {
-    for (int i = 0; i < rows - 1; i++) // ограничение на последнюю строку (rows - 1), т.к. под последней строкой не может быть эл-ов 
-    {
-        for (int j = 0; j < cols; j++)
-        {
-            if ((arr[i][j] == 7) && (arr[i + 1][j] == 0))
-            {
-                arr[i][j] = 0;
-                arr[i + 1][j] = 7;
-                return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
-            }
-            if ((arr[i][j] == 7) && (arr[i + 1][j] == 2))
-            {
-                arr[i][j] = 0;
-                arr[i + 1][j] = 7;
-                return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
-            }
-        }
-    }
+	for (int i = 0; i < rows - 1; i++) // ограничение на последнюю строку (rows - 1), т.к. под последней строкой не может быть эл-ов 
+	{
+		for (int j = 0; j < cols; j++)
+		{
+			if ((arr[i][j] == 7) && (arr[i + 1][j] == 0))
+			{
+				arr[i][j] = 0;
+				arr[i + 1][j] = 7;
+				return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
+			}
+			if ((arr[i][j] == 7) && (arr[i + 1][j] == 2))
+			{
+				arr[i][j] = 0;
+				arr[i + 1][j] = 7;
+				return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
+			}
+		}
+	}
 }
-void EnemyUp(int** const arr, const int rows, const int cols)
+void Matrix::EnemyUp()
 {
-    for (int i = rows - 1; i > 0; i--) // ограничение на последнюю строку (rows - 1), т.к. под последней строкой не может быть эл-ов  
-        /*_____число rows меняется_____*/
-    {
-        for (int j = 0; j < cols; j++)
-        {
-            if ((arr[i][j] == 7) && (arr[i - 1][j] == 0))
-            {
-                arr[i][j] = 0;
-                arr[i - 1][j] = 7;
-                return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
-            }
-            if ((arr[i][j] == 7) && (arr[i - 1][j] == 2))
-            {
-                arr[i][j] = 0;
-                arr[i - 1][j] = 7;
-                return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
-            }
-        }
-    }
+	for (int i = rows - 1; i > 0; i--) // ограничение на последнюю строку (rows - 1), т.к. под последней строкой не может быть эл-ов  
+		/*_____число rows меняется_____*/
+	{
+		for (int j = 0; j < cols; j++)
+		{
+			if ((arr[i][j] == 7) && (arr[i - 1][j] == 0))
+			{
+				arr[i][j] = 0;
+				arr[i - 1][j] = 7;
+				return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
+			}
+			if ((arr[i][j] == 7) && (arr[i - 1][j] == 2))
+			{
+				arr[i][j] = 0;
+				arr[i - 1][j] = 7;
+				return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
+			}
+		}
+	}
 }
-void EnemyRight(int** const arr, const int rows, const int cols)
+void Matrix::EnemyRight()
 {
-    for (int i = 0; i < rows; i++) // ограничение на последнюю строку (rows - 1), т.к. под последней строкой не может быть эл-ов 
-    {
-        for (int j = 0; j < cols - 1; j++)
-        {
-            if ((arr[i][j] == 7) && (arr[i][j + 1] == 0))
-            {
-                arr[i][j] = 0;
-                arr[i][j + 1] = 7;
-                return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
-            }
-            if ((arr[i][j] == 7) && (arr[i][j + 1] == 2))
-            {
-                arr[i][j] = 0;
-                arr[i][j + 1] = 7;
-                return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
-            }
-        }
-    }
+	for (int i = 0; i < rows; i++) // ограничение на последнюю строку (rows - 1), т.к. под последней строкой не может быть эл-ов 
+	{
+		for (int j = 0; j < cols - 1; j++)
+		{
+			if ((arr[i][j] == 7) && (arr[i][j + 1] == 0))
+			{
+				arr[i][j] = 0;
+				arr[i][j + 1] = 7;
+				return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
+			}
+			if ((arr[i][j] == 7) && (arr[i][j + 1] == 2))
+			{
+				arr[i][j] = 0;
+				arr[i][j + 1] = 7;
+				return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
+			}
+		}
+	}
 }
-void EnemyLeft(int** const arr, const int rows, const int cols)
+void Matrix::EnemyLeft()
 {
-    for (int i = 0; i < rows; i++) // ограничение на последнюю строку (rows - 1), т.к. под последней строкой не может быть эл-ов 
-    {
-        for (int j = cols - 1; j > 0; j--)
-        {
-            if ((arr[i][j] == 7) && (arr[i][j - 1] == 0))
-            {
-                arr[i][j] = 0;
-                arr[i][j - 1] = 7;
-                return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
-            }
-            if ((arr[i][j] == 7) && (arr[i][j - 1] == 2))
-            {
-                arr[i][j] = 0;
-                arr[i][j - 1] = 7;
-                return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
-            }
-        }
-    }
+	for (int i = 0; i < rows; i++) // ограничение на последнюю строку (rows - 1), т.к. под последней строкой не может быть эл-ов 
+	{
+		for (int j = cols - 1; j > 0; j--)
+		{
+			if ((arr[i][j] == 7) && (arr[i][j - 1] == 0))
+			{
+				arr[i][j] = 0;
+				arr[i][j - 1] = 7;
+				return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
+			}
+			if ((arr[i][j] == 7) && (arr[i][j - 1] == 2))
+			{
+				arr[i][j] = 0;
+				arr[i][j - 1] = 7;
+				return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
+			}
+		}
+	}
 }
-void RandomEnemyMove(int** const arr, const int rows, const int cols)
+void Matrix::RandomEnemyMove()
 {
-    srand((unsigned int)time(NULL));
-    int randomMove = 1 + rand() % 4; 
-    if (randomMove == 1)
-        EnemyDown(arr, rows, cols);
-    else if (randomMove == 2)
-        EnemyUp(arr, rows, cols);
-    else if (randomMove == 3)
-        EnemyRight(arr, rows, cols);
-    else if (randomMove == 4)
-        EnemyLeft(arr, rows, cols);
+	for (int i = 0; i < rows; i++)
+	{
+		for (int j = 0; j < cols; j++)
+		{
+			if (arr[i][j] == 7)//2.4//2.5
+			{
+				//srand((unsigned int)time(NULL)); надо вызывать 1 раз, а то вызывают одинаковые числа, здесь ф-я не успевает выдать другое числа.
+				int randomMove = 1 + rand() % 4;
+				switch (randomMove)
+				{
+				case 1:
+					EnemyDown();
+					break;
+				case 2:
+					EnemyUp();
+					break;
+				case 3:
+					EnemyRight();//2.5
+					break;
+
+				case 4:
+					EnemyLeft();
+					break;
+				}
+				return;// чтобы выйти из ф-ии randomMove послде совершения движения, return выходит из ф-ии в котор
+			}
+		}
+	}
+	return;
+
 }
-bool isGameOver(int** const arr, const int rows, const int cols)
+bool Matrix::isGameOver()
 {
-    bool found = true;
-    for (int i = 0; i < rows; i++)
-    {
-        for (int j = 0; j < cols; j++)
-        {
-            if (arr[i][j] == 2)
-            {
-                found = false;
-                return found;;
-            }             
-        }
-    }
-    return found;     
-} 
+	bool found = true;
+	for (int i = 0; i < rows; i++)
+	{
+		for (int j = 0; j < cols; j++)
+		{
+			if (arr[i][j] == 2)
+			{
+				found = false;
+				return found;;
+			}
+		}
+	}
+	return found;
+}
 int main()
 {
-    setlocale(LC_ALL, "");
-    int rows=10, cols=10, k=10, pattern=2;
-    int** arr = NULL; //чтобы создать двумерный динамический массив, создаем указатель на массив указателей
-    cout << "Введите количество строк и столбцов и число единиц (не равное размеру матрицы - 2): " << endl;    
-    //cin >> rows >> cols >> k;
-    if (k < (rows * cols)-2)
-    {
-        bool escape_pressed = false; //для выхода их программы
-        bool nowGameOver =false; //глобальная переменная
-        arr = CreateArray(rows, cols);
-        FillArray(arr, rows, cols, k);
-        ShowArray(arr, rows, cols);
-        for (int i=1;(!escape_pressed)&&(!nowGameOver);i++)
-        {
-            nowGameOver = isGameOver(arr, rows, cols);  
-            Sleep(70);
-            if (i % 5 == 0)
-            {
-                RandomEnemyMove(arr, rows, cols);
-                ShowArray(arr, rows, cols);
-            }           
-            if (_kbhit())
-            {
-                switch (_getch()) //if else для проверки переменной
-                {
-                case 27:
-                    escape_pressed = true;
-                case 72:
-                    ChangeUp(arr, rows, cols);
-                    ShowArray(arr, rows, cols);
-                    break;
-                case 80:
-                    ChangeDown(arr, rows, cols);
-                    ShowArray(arr, rows, cols);
-                    break;
+	srand((unsigned int)time(NULL)); // только здесь 1 раз , последовательность меняется
+	setlocale(LC_ALL, "");
+	//int rows = 20, cols = 30, k = 10, pattern = 2;
+	Matrix* matr = new Matrix(20, 30); 
+	int** arr = NULL; //чтобы создать двумерный динамический массив, создаем указатель на массив указателей
+	cout << "Введите количество строк и столбцов и число единиц (не равное размеру матрицы - 2): " << endl;
+	//cin >> rows >> cols >> k; 
+	
+	bool escape_pressed = false; //для выхода их программы
+	bool nowGameOver = false; //глобальная переменная
+	//arr = CreateArray(rows, cols);
+	matr->FillArray(1); //параметр k - преграда
+	matr->ShowArray();
+	for (int i = 1; (!escape_pressed) && (!nowGameOver); i++)
+	{
+		nowGameOver = matr->isGameOver();
+		Sleep(70);
+		if (i % 5 == 0)
+		{
+			matr->RandomEnemyMove();
+			matr->ShowArray();
+		}
+		if (_kbhit())
+		{
+			switch (_getch()) //if else для проверки переменной
+			{
+			case 27:
+				escape_pressed = true;
+			case 72:
+				matr->ChangeUp();
+				matr->ShowArray();
+				break;
+			case 80:
+				matr->ChangeDown();
+				matr->ShowArray();
+				break;
 
-                case 75:
-                    ChangeLeft(arr, rows, cols);
-                    ShowArray(arr, rows, cols);
-                    break;
+			case 75:
+				matr->ChangeLeft();
+				matr->ShowArray();
+				break;
 
-                case 77:
-                    ChangeRight(arr, rows, cols);
-                    ShowArray(arr, rows, cols);
-                    break;
-                }
-            }          
-        }
-        DestroyArray(arr, rows, cols);
-    }
-    HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE); //для получения дискрипптора
-    SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY); //белый
-    cout << endl;
-    cout << "Программа завершена." << endl; 
-    return 0;
+			case 77:
+				matr->ChangeRight();
+				matr->ShowArray();
+				break;
+			}
+		}
+	}
+	delete matr;
+	HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE); //для получения дискрипптора
+	SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY); //белый
+	cout << endl;
+	cout << "Программа завершена." << endl;
+	return 0;
 }
 
 
@@ -397,7 +442,7 @@ int main()
 
 
 
-/*void ShowArray(int** const arr, const int rows, const int cols)
+/*void ShowArray()
 const чтобы ф-я гарантированна пробежала по всем эл-ам  массива, в ф-ии мы не сможем никак поменять константные значения
 если бы перед arr поставил значения, то я б не смог присвоить никакие зн-я массиву arr*/
 /* НЕ СОГЛАСЕН
@@ -406,9 +451,9 @@ const чтобы ф-я гарантированна пробежала по всем эл-ам  массива, в ф-ии мы не см
 const - ТОЖЕ НЕ НУЖЕН, В НЁМ ВООБЩЕ СМЫСЛЕ НЕТ, ТАК КАК ТЕБЕ НУЖНО ПОМЕНЯТЬ ЗНАЧЕНИЯ
 int &k - ЗАЧЕМ ПО ССЫЛКЕ ПЕРЕДАВАТЬ? ТЫ ЖЕ НЕ СОБИРАЕШЬСЯ МЕНЯТЬ ЗНАЧЕНИЕ k
 void FillArray(int** arr, const int rows, const int cols, int k) - ТАКАЯ СИГНАТУРА НОРМАЛЬНАЯ
-                          -- комментарии от Виктора -- */
-                          /*const чтобы ф-я гарантированна пробежала по всем эл-ам  массива, в ф-ии мы не сможем никак поменять константные значения
-                          если бы перед arr поставил значения, то я б не смог присвоить никакие зн-я массиву arr*/
+						  -- комментарии от Виктора -- */
+						  /*const чтобы ф-я гарантированна пробежала по всем эл-ам  массива, в ф-ии мы не сможем никак поменять константные значения
+						  если бы перед arr поставил значения, то я б не смог присвоить никакие зн-я массиву arr*/
 
 
 
