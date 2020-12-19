@@ -193,7 +193,7 @@ void Matrix::PlayerDown()
 }
 void Matrix::PlayerUp()
 {
-	if ((player_i <= 0) || (player_i == rows - 1)) // если player_i меньше или равно 0 и на последней строке
+	if (player_i <= 0) // если player_i меньше или равно 0 и на последней строке
 		return; // я выйду из ф-ии
 	if (arr[player_i - 1][player_j] == 0)
 	{
@@ -231,7 +231,7 @@ void Matrix::PlayerRight()
 }
 void Matrix::PlayerLeft()
 {
-	if ((player_j < 0) || (player_j == cols - 1))
+	if (player_j < 0)
 		return;
 	if (arr[player_i][player_j - 1] == 0)
 	{
