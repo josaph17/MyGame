@@ -1,10 +1,9 @@
-#include <windows.h> // для цвета
+﻿#include <windows.h> // для цвета
 #include <iostream>
 #include <iomanip> //для setw
 #include <ctime> //для генерации случайных чисел
 #include <conio.h> //для _getch()
 using namespace std;
-
 
 class Matrix {
 public:
@@ -39,7 +38,7 @@ void set_cursor(int x = 0, int y = 0)
     // заголовка handle в координаты coordinates
 }
 
-Matrix::Matrix(int rows, int cols) //выделение памяти
+Matrix::Matrix(int rows, int cols) //параметры
 {
 	this->rows = rows;
 	this->cols = cols;
@@ -50,8 +49,8 @@ Matrix::Matrix(int rows, int cols) //выделение памяти
 		arr[i] = new int[cols]; /*в каждый элемент который будет хранить указатель на int мы будем присваивать новый динамический массив, размер массива будет соответсвовать переменной colls*/
 		//объявление и создание массива, выделение под него памяти5
 	}
-	player_i = -1; //чтобы не были в зоне видимости поля
-	player_j = -1; //чтобы не были в зоне видимости поля
+	player_i = -1; //это означает что игрока нет
+	player_j = -1; //это означает что игрока нет
 }//коонструктор
 Matrix::~Matrix() //полность удаляем нашу ОП после того как поработаем с нашим массивом и он нам станет ненужен
 {
@@ -356,7 +355,6 @@ void Matrix::RandomEnemyMove()
 		}
 	}
 	return;
-
 }
 
 bool Matrix::isGameOver()
