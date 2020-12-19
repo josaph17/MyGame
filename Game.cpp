@@ -361,14 +361,8 @@ void Matrix::RandomEnemyMove()
 
 bool Matrix::isGameOver()
 {
-	bool found = true; 
-	if (arr[player_i][player_j] == 2)
-	//if ((player_i == -1) || (player_j == -1))
-	{
-		found = false; 
-		return found;
-	}
-	return found;
+	return player_i == -1;
+	//player_j == -1 //если они равны -1, то это выражени будет true
 }
 int main()
 {
@@ -381,13 +375,11 @@ int main()
 	//cin >> rows >> cols >> k; 
 	
 	bool escape_pressed = false; //для выхода их программы
-	bool nowGameOver = false; //глобальная переменная
 	//arr = CreateArray(rows, cols);
 	matr->FillArray(1); //параметр k - преграда
 	matr->ShowArray();
-	for (int i = 1; (!escape_pressed) && (!nowGameOver); i++)
+	for (int i = 1; (!escape_pressed) && (!matr->isGameOver()); i++)
 	{
-		nowGameOver = matr->isGameOver();
 		Sleep(70);
 		if (i % 5 == 0)
 		{
