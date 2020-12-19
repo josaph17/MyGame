@@ -1,4 +1,4 @@
-﻿#include <windows.h> // для цвета
+#include <windows.h> // для цвета
 #include <iostream>
 #include <iomanip> //для setw
 #include <ctime> //для генерации случайных чисел
@@ -118,14 +118,10 @@ void Matrix::ShowArray() //вывод массива
 	set_cursor(0, 0);
 	HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY); //белый
-	for (int j = 0; j <= cols + 1; j++)
-	{
-		if ((j == 0) || (j == cols + 1))
-			cout << "+";
-		else
-			cout << "--";
-	}
-	cout << endl;
+	cout << "+";
+	for (int j = 0; j < cols; j++)
+		cout << "--";
+	cout << "+" << endl;
 	for (int i = 0; i < rows; i++)
 	{
 		SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY); //белый
@@ -158,15 +154,10 @@ void Matrix::ShowArray() //вывод массива
 		cout << endl;//в конце каждой строки будет отвечать за переход на следующую строчку
 	}
 	SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY); //белый
-	for (int j = 0; j <= cols + 1; j++)
-	{
-		if ((j == 0) || (j == cols + 1))
-			cout << "+";
-		else
-			cout << "--";
-
-	}
-	cout << endl;
+	cout << "+";
+	for (int j = 0; j < cols; j++)
+		cout << "--";
+	cout << "+" << endl;
 	/*cout << "Для продолжения работы программы нажмите любую кнопку ";
 	cin.get();*/
 	cout << endl;
