@@ -1,7 +1,7 @@
 ﻿#include <windows.h> // для цвета
-#include<iostream>
-#include<iomanip> //для setw
-#include<ctime> //для генерации случайных чисел
+#include <iostream>
+#include <iomanip> //для setw
+#include <ctime> //для генерации случайных чисел
 #include <conio.h> //для _getch()
 using namespace std;
 
