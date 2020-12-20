@@ -25,6 +25,7 @@ private:
 	int** arr;//данные
 	int rows, cols;//размеры
 	int player_i, player_j;
+	int enemy_i, enemy_j;
 };
 
 void set_cursor(int x = 0, int y = 0)
@@ -38,9 +39,9 @@ void set_cursor(int x = 0, int y = 0)
     // заголовка handle в координаты coordinates
 }
 
-Matrix::Matrix(int rows, int cols) //параметры
+Matrix::Matrix(int rows, int cols) //параметры в конструкторе
 {
-	this->rows = rows;
+	this->rows = rows; 
 	this->cols = cols;
 	arr = new int* [rows];  //переменная arr будет хранить указатель на указатель  
 			//мы создаем массив указателей, мы здесь будем хранить указатели  
@@ -51,6 +52,8 @@ Matrix::Matrix(int rows, int cols) //параметры
 	}
 	player_i = -1; //это означает что игрока нет
 	player_j = -1; //это означает что игрока нет
+	enemy_i = -1;
+	enemy_j = -1;
 }//коонструктор
 Matrix::~Matrix() //полность удаляем нашу ОП после того как поработаем с нашим массивом и он нам станет ненужен
 {
@@ -99,12 +102,12 @@ void Matrix::FillArray(int k) //ф-я заполнения массива дан
 	}
 	for (int p = 0; p < 1;)    //для врагов
 	{
-		int randomRow = rand() % rows;
-		int randomCol = rand() % cols;
+		int enemy_i = rand() % rows;
+		int enemy_j = rand() % cols;
 
-		if (arr[randomRow][randomCol] == 0)
+		if (arr[enemy_i][enemy_j] == 0)
 		{
-			arr[randomRow][randomCol] = 7; //enemy
+			arr[enemy_i][enemy_j] = 7; //enemy
 			p++;
 		}
 		else
@@ -241,125 +244,112 @@ void Matrix::PlayerLeft()
 //Enemy
 void Matrix::EnemyDown()
 {
-	for (int i = 0; i < rows - 1; i++) // ограничение на последнюю строку (rows - 1), т.к. под последней строкой не может быть эл-ов 
+	if ((enemy_i < 0) || (enemy_i == rows - 1)) // если меньше 0 или на последней строке 
+		return; // я выйду из ф-ии
+	if (arr[enemy_i + 1][enemy_j] == 0)
 	{
-		for (int j = 0; j < cols; j++)
-		{
-			if ((arr[i][j] == 7) && (arr[i + 1][j] == 0))
-			{
-				arr[i][j] = 0;
-				arr[i + 1][j] = 7;
-				return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
-			}
-			if ((arr[i][j] == 7) && (arr[i + 1][j] == 2))
-			{
-				arr[i][j] = 0;
-				arr[i + 1][j] = 7;
-				return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
-			}
-		}
+		arr[enemy_i][enemy_j] = 0;
+		arr[enemy_i + 1][enemy_j] = 7;
+		enemy_i++; //меняем координату игрока
+		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
+	}
+	if (arr[enemy_i + 1][enemy_j] == 2) //если враг встретит игрока
+	{
+		arr[enemy_i][enemy_j] = 0; //игрок становится нулем
+		arr[enemy_i + 1][enemy_j] = 7;
+		player_i = -1;//т.к. меня съели 
+		player_j = -1; //т.к. меня съели
+		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
 	}
 }
 void Matrix::EnemyUp()
 {
-	for (int i = rows - 1; i > 0; i--) // ограничение на последнюю строку (rows - 1), т.к. под последней строкой не может быть эл-ов  
-		/*_____число rows меняется_____*/
+	if (enemy_i <= 0) // если player_i меньше или равно 0 и на последней строке
+		return; // я выйду из ф-ии
+	if (arr[enemy_i - 1][enemy_j] == 0)
 	{
-		for (int j = 0; j < cols; j++)
-		{
-			if ((arr[i][j] == 7) && (arr[i - 1][j] == 0))
-			{
-				arr[i][j] = 0;
-				arr[i - 1][j] = 7;
-				return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
-			}
-			if ((arr[i][j] == 7) && (arr[i - 1][j] == 2))
-			{
-				arr[i][j] = 0;
-				arr[i - 1][j] = 7;
-				return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
-			}
-		}
+		arr[enemy_i][enemy_j] = 0;
+		arr[enemy_i - 1][enemy_j] = 2;
+		enemy_i--;
+		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
+	}
+	if (arr[enemy_i - 1][enemy_j] == 2)
+	{
+		arr[enemy_i][enemy_j] = 0;
+		arr[enemy_i - 1][enemy_j] = 7;
+		player_i = -1;
+		player_j = -1;
+		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
 	}
 }
 void Matrix::EnemyRight()
 {
-	for (int i = 0; i < rows; i++) // ограничение на последнюю строку (rows - 1), т.к. под последней строкой не может быть эл-ов 
+	if ((enemy_j < 0) || (enemy_j > cols))
+		return;
+	if (arr[enemy_i][enemy_j + 1] == 0)
 	{
-		for (int j = 0; j < cols - 1; j++)
-		{
-			if ((arr[i][j] == 7) && (arr[i][j + 1] == 0))
-			{
-				arr[i][j] = 0;
-				arr[i][j + 1] = 7;
-				return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
-			}
-			if ((arr[i][j] == 7) && (arr[i][j + 1] == 2))
-			{
-				arr[i][j] = 0;
-				arr[i][j + 1] = 7;
-				return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
-			}
-		}
+		arr[enemy_i][enemy_j] = 0;
+		arr[enemy_i][enemy_j + 1] = 7;
+		enemy_j++;
+		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
+	}
+	if (arr[enemy_i][enemy_j + 1] == 2)
+	{
+		arr[enemy_i][enemy_j] = 0;
+		arr[enemy_i][enemy_j + 1] = 7;
+		player_i = -1;//т.к. меня съели 
+		player_j = -1; //т.к. меня съели
+		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
 	}
 }
 void Matrix::EnemyLeft()
 {
-	for (int i = 0; i < rows; i++) // ограничение на последнюю строку (rows - 1), т.к. под последней строкой не может быть эл-ов 
+	if (enemy_i < 0)
+		return;
+	if (arr[enemy_i][enemy_j - 1] == 0)
 	{
-		for (int j = cols - 1; j > 0; j--)
-		{
-			if ((arr[i][j] == 7) && (arr[i][j - 1] == 0))
-			{
-				arr[i][j] = 0;
-				arr[i][j - 1] = 7;
-				return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
-			}
-			if ((arr[i][j] == 7) && (arr[i][j - 1] == 2))
-			{
-				arr[i][j] = 0;
-				arr[i][j - 1] = 7;
-				return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
-			}
-		}
+		arr[enemy_i][enemy_j] = 0;
+		arr[enemy_i][enemy_j - 1] = 7;
+		enemy_j--;
+		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
+	}
+	if (arr[enemy_i][enemy_j - 1] == 2)
+	{
+		arr[enemy_i][enemy_j] = 0;
+		arr[enemy_i][enemy_j - 1] = 7;
+		player_i = -1;//т.к. меня съели 
+		player_j = -1;
+		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
 	}
 }
 void Matrix::RandomEnemyMove()
 {
-	for (int i = 0; i < rows; i++)
+	for (int p=1; p>0; )
 	{
-		for (int j = 0; j < cols; j++)
+		//srand((unsigned int)time(NULL)); надо вызывать 1 раз, а то вызывают одинаковые числа, здесь ф-я не успевает выдать другое числа.
+		int randomMove = 1 + rand() % 4;
+		switch (randomMove)
 		{
-			if (arr[i][j] == 7)//2.4//2.5
-			{
-				//srand((unsigned int)time(NULL)); надо вызывать 1 раз, а то вызывают одинаковые числа, здесь ф-я не успевает выдать другое числа.
-				int randomMove = 1 + rand() % 4;
-				switch (randomMove)
-				{
-				case 1:
-					EnemyDown();
-					break;
-				case 2:
-					EnemyUp();
-					break;
-				case 3:
-					EnemyRight();//2.5
-					break;
-
-				case 4:
-					EnemyLeft();
-					break;
-				}
-				return;// чтобы выйти из ф-ии randomMove послде совершения движения, return выходит из ф-ии в котор
-			}
+		case 1:
+			EnemyDown();
+			break;
+		case 2:
+			EnemyUp();
+			break;
+		case 3:
+			EnemyRight();
+			break;
+		case 4:
+			EnemyLeft();
+			break;
 		}
+		return;// чтобы выйти из ф-ии randomMove после совершения движения, return выходит из ф-ии в котор
 	}
 	return;
 }
-
 bool Matrix::isGameOver()
 {
-	return player_i == -1;
+	return (player_i == -1)&&(player_j == -1);
 	//player_j == -1 //если они равны -1, то это выражени будет true
 }
 int main()
@@ -379,7 +369,7 @@ int main()
 	for (int i = 1; (!escape_pressed) && (!matr->isGameOver()); i++)
 	{
 		Sleep(70);
-		if (i % 5 == 0)
+		if (i % 5 == 0) //каждое 5-ое i выводить случайное движение врага, 5:5 = 0, без остатка
 		{
 			matr->RandomEnemyMove();
 			matr->ShowArray();
