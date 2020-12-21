@@ -102,8 +102,8 @@ void Matrix::FillArray(int k) //ф-я заполнения массива дан
 	}
 	for (int p = 0; p < 1;)    //для врагов
 	{
-		int enemy_i = rand() % rows;
-		int enemy_j = rand() % cols;
+		enemy_i = rand() % rows; //не ставить int т.к. это новые перем
+		enemy_j = rand() % cols;
 
 		if (arr[enemy_i][enemy_j] == 0)
 		{
@@ -269,7 +269,7 @@ void Matrix::EnemyUp()
 	if (arr[enemy_i - 1][enemy_j] == 0)
 	{
 		arr[enemy_i][enemy_j] = 0;
-		arr[enemy_i - 1][enemy_j] = 2;
+		arr[enemy_i - 1][enemy_j] = 7;
 		enemy_i--;
 		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
 	}
@@ -380,6 +380,7 @@ int main()
 			{
 			case 27:
 				escape_pressed = true;
+				break;
 			case 72:
 				matr->PlayerUp();
 				matr->ShowArray();
