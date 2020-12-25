@@ -5,10 +5,49 @@
 #include <conio.h> //для _getch()
 using namespace std;
 
-class Matrix {
+
+class Matrix
+{
 public:
 	Matrix(int rows, int cols);
 	~Matrix();
+	void FillArray(int k); //ля заполнения игрорвого поля
+	void ShowArray();
+//private:
+	int** arr;//данные
+	int rows, cols;//размеры
+};
+
+Matrix::Matrix(int rows, int cols) //параметры в конструкторе
+{
+	this->rows = rows;
+	this->cols = cols;
+	arr = new int* [rows];  //переменная arr будет хранить указатель на указатель  
+			//мы создаем массив указателей, мы здесь будем хранить указатели  
+	for (int i = 0; i < rows; i++)
+	{
+		arr[i] = new int[cols]; /*в каждый элемент который будет хранить указатель на int мы будем присваивать новый динамический массив, размер массива будет соответсвовать переменной colls*/
+		//объявление и создание массива, выделение под него памяти5
+		for (int j = 0; j < cols; j++)
+		{
+			arr[i][j] = 0;
+		}
+	}
+}//коонструктор
+Matrix::~Matrix() //полность удаляем нашу ОП после того как поработаем с нашим массивом и он нам станет ненужен
+{
+	for (int i = 0; i < rows; i++)
+	{
+		delete[]arr[i];
+	}
+	delete[]arr;
+}
+
+
+class Game {
+public:
+	Game(int rows, int cols);
+	~Game();
 	void FillArray(int k); //ля заполнения игрорвого поля
 	void ShowArray();
 	void PlayerDown();
@@ -22,8 +61,7 @@ public:
 	void RandomEnemyMove();
 	bool isGameOver();
 private:
-	int** arr;//данные
-	int rows, cols;//размеры
+	Matrix*board;
 	int player_i, player_j;
 	int enemy_i, enemy_j;
 };
@@ -39,49 +77,30 @@ void set_cursor(int x = 0, int y = 0)
     // заголовка handle в координаты coordinates
 }
 
-Matrix::Matrix(int rows, int cols) //параметры в конструкторе
+Game::Game(int rows, int cols) //параметры в конструкторе
 {
-	this->rows = rows; 
-	this->cols = cols;
-	arr = new int* [rows];  //переменная arr будет хранить указатель на указатель  
-			//мы создаем массив указателей, мы здесь будем хранить указатели  
-	for (int i = 0; i < rows; i++)
-	{
-		arr[i] = new int[cols]; /*в каждый элемент который будет хранить указатель на int мы будем присваивать новый динамический массив, размер массива будет соответсвовать переменной colls*/
-		//объявление и создание массива, выделение под него памяти5
-	}
+	board = new Matrix(20, 20);
 	player_i = -1; //это означает что игрока нет
 	player_j = -1; //это означает что игрока нет
 	enemy_i = -1;
 	enemy_j = -1;
 }//коонструктор
-Matrix::~Matrix() //полность удаляем нашу ОП после того как поработаем с нашим массивом и он нам станет ненужен
+Game::~Game() //полность удаляем нашу ОП после того как поработаем с нашим массивом и он нам станет ненужен
 {
-	for (int i = 0; i < rows; i++)
-	{
-		delete[]arr[i];
-	}
-	delete[]arr;
+	delete board;
 }
 
-void Matrix::FillArray(int k) //ф-я заполнения массива данными, &arr т.к.  ассив меняется и адрес тоже
+void Game::FillArray(int k) //ф-я заполнения массива данными, &arr т.к.  ассив меняется и адрес тоже
 {
-	for (int i = 0; i < rows; i++)
-	{
-		for (int j = 0; j < cols; j++)
-		{
-			arr[i][j] = 0;
-		}
-	}
 	//srand((unsigned int)time(NULL));
 	for (int p = 0; p < k;)
 	{
-		int randomRow = rand() % rows;
-		int randomCol = rand() % cols;
+		int randomRow = rand() % board->rows;
+		int randomCol = rand() % board->cols;
 
-		if (arr[randomRow][randomCol] == 0)
+		if (board->arr[randomRow][randomCol] == 0)
 		{
-			arr[randomRow][randomCol] = 1;
+			board->arr[randomRow][randomCol] = 1; //преграда
 			p++;
 		}
 		else
@@ -89,12 +108,12 @@ void Matrix::FillArray(int k) //ф-я заполнения массива дан
 	}
 	for (int p = 0; p < 1;)    //для рандомной 2//////////////////////////////////////
 	{
-		player_i = rand() % rows;
-		player_j = rand() % cols;
+		player_i = rand() % board->rows;
+		player_j = rand() % board->cols;
 
-		if (arr[player_i][player_j] == 0)
+		if (board->arr[player_i][player_j] == 0)
 		{
-			arr[player_i][player_j] = 2;// игрок
+			board->arr[player_i][player_j] = 2;// игрок
 			p++;
 		}
 		else
@@ -102,50 +121,50 @@ void Matrix::FillArray(int k) //ф-я заполнения массива дан
 	}
 	for (int p = 0; p < 1;)    //для врагов
 	{
-		enemy_i = rand() % rows; //не ставить int т.к. это новые перем
-		enemy_j = rand() % cols;
+		enemy_i = rand() % board->rows; //не ставить int т.к. это новые перем
+		enemy_j = rand() % board->cols;
 
-		if (arr[enemy_i][enemy_j] == 0)
+		if (board->arr[enemy_i][enemy_j] == 0)
 		{
-			arr[enemy_i][enemy_j] = 7; //enemy
+			board->arr[enemy_i][enemy_j] = 7; //enemy
 			p++;
 		}
 		else
 			continue;
 	}
 }
-void Matrix::ShowArray() //вывод массива
+void Game::ShowArray() //вывод массива
 {
 	//system("cls"); //ф-я очистки экрана (консоли)
 	set_cursor(0, 0);
 	HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY); //белый
 	cout << "+";
-	for (int j = 0; j < cols; j++)
+	for (int j = 0; j < board->cols; j++)
 		cout << "--";
 	cout << "+" << endl;
-	for (int i = 0; i < rows; i++)
+	for (int i = 0; i < board->rows; i++)
 	{
 		SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY); //белый
 		cout << "|";
-		for (int j = 0; j < cols; j++)
+		for (int j = 0; j < board->cols; j++)
 		{
 			//для получения дискрипптора
-			if (arr[i][j] == 0)
+			if (board->arr[i][j] == 0)
 			{
 				cout << "  ";
 			}
-			if (arr[i][j] == 1)
+			if (board->arr[i][j] == 1)
 			{
 				SetConsoleTextAttribute(console, FOREGROUND_GREEN | FOREGROUND_INTENSITY); //зеленые
 				cout << "[]";
 			}
-			if (arr[i][j] == 2)
+			if (board->arr[i][j] == 2)
 			{
 				SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_INTENSITY); //белый
 				cout << "()";
 			}
-			if (arr[i][j] == 7)
+			if (board->arr[i][j] == 7)
 			{
 				SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY); //синий
 				cout << "**";
@@ -157,172 +176,172 @@ void Matrix::ShowArray() //вывод массива
 	}
 	SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY); //белый
 	cout << "+";
-	for (int j = 0; j < cols; j++)
+	for (int j = 0; j < board->cols; j++)
 		cout << "--";
 	cout << "+" << endl;
 	/*cout << "Для продолжения работы программы нажмите любую кнопку ";
 	cin.get();*/
 	cout << endl;
 }
-void Matrix::PlayerDown()
+void Game::PlayerDown()
 {
-	if ((player_i < 0) || (player_i == rows-1)) // если меньше 0 или на последней строке 
+	if ((player_i < 0) || (player_i == board->rows-1)) // если меньше 0 или на последней строке 
 		return; // я выйду из ф-ии
-	if (arr[player_i + 1][player_j] == 0)
+	if (board->arr[player_i + 1][player_j] == 0)
 	{
-		arr[player_i][player_j] = 0;
-		arr[player_i + 1][player_j] = 2;
+		board->arr[player_i][player_j] = 0;
+		board->arr[player_i + 1][player_j] = 2;
 		player_i++; //меняем координату игрока
 		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
 	}
-	if (arr[player_i + 1][player_j] == 7)
+	if (board->arr[player_i + 1][player_j] == 7)
 	{
-		arr[player_i][player_j] = 0; //игрок становится нулем
+		board->arr[player_i][player_j] = 0; //игрок становится нулем
 		player_i = -1;//т.к. меня съели 
 		player_j = -1; //т.к. меня съели
 		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
 	}
 	
 }
-void Matrix::PlayerUp()
+void Game::PlayerUp()
 {
 	if (player_i <= 0) // если player_i меньше или равно 0 и на последней строке
 		return; // я выйду из ф-ии
-	if (arr[player_i - 1][player_j] == 0)
+	if (board->arr[player_i - 1][player_j] == 0)
 	{
-		arr[player_i][player_j] = 0;
-		arr[player_i - 1][player_j] = 2;
+		board->arr[player_i][player_j] = 0;
+		board->arr[player_i - 1][player_j] = 2;
 		player_i--;
 		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
 	}
-	if (arr[player_i - 1][player_j] == 7)
+	if (board->arr[player_i - 1][player_j] == 7)
 	{
-		arr[player_i][player_j] = 0;
+		board->arr[player_i][player_j] = 0;
 		player_i = -1;
 		player_j = -1;
 		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
 	}
 }
-void Matrix::PlayerRight()
+void Game::PlayerRight()
 {
-	if ((player_j < 0) || (player_j > cols))
+	if ((player_j < 0) || (player_j > board->cols))
 		return;
-	if (arr[player_i][player_j + 1] == 0)
+	if (board->arr[player_i][player_j + 1] == 0)
 	{
-		arr[player_i][player_j] = 0;
-		arr[player_i][player_j + 1] = 2;
+		board->arr[player_i][player_j] = 0;
+		board->arr[player_i][player_j + 1] = 2;
 		player_j++;
 		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
 	}
-	if (arr[player_i][player_j + 1] == 7)
+	if (board->arr[player_i][player_j + 1] == 7)
 	{
-		arr[player_i][player_j] = 0;
+		board->arr[player_i][player_j] = 0;
 		player_i = -1;//т.к. меня съели 
 		player_j = -1; //т.к. меня съели
 		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
 	}
 }
-void Matrix::PlayerLeft()
+void Game::PlayerLeft()
 {
 	if (player_j < 0)
 		return;
-	if (arr[player_i][player_j - 1] == 0)
+	if (board->arr[player_i][player_j - 1] == 0)
 	{
-		arr[player_i][player_j] = 0;
-		arr[player_i][player_j - 1] = 2;
+		board->arr[player_i][player_j] = 0;
+		board->arr[player_i][player_j - 1] = 2;
 		player_j--;
 		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
 	}
-	if (arr[player_i][player_j - 1] == 7)
+	if (board->arr[player_i][player_j - 1] == 7)
 	{
-		arr[player_i][player_j] = 0;
+		board->arr[player_i][player_j] = 0;
 		player_i = -1;//т.к. меня съели 
 		player_j = -1;
 		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
 	}
 }
 //Enemy
-void Matrix::EnemyDown()
+void Game::EnemyDown()
 {
-	if ((enemy_i < 0) || (enemy_i == rows - 1)) // если меньше 0 или на последней строке 
+	if ((enemy_i < 0) || (enemy_i == board->rows - 1)) // если меньше 0 или на последней строке 
 		return; // я выйду из ф-ии
-	if (arr[enemy_i + 1][enemy_j] == 0)
+	if (board->arr[enemy_i + 1][enemy_j] == 0)
 	{
-		arr[enemy_i][enemy_j] = 0;
-		arr[enemy_i + 1][enemy_j] = 7;
+		board->arr[enemy_i][enemy_j] = 0;
+		board->arr[enemy_i + 1][enemy_j] = 7;
 		enemy_i++; //меняем координату игрока
 		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
 	}
-	if (arr[enemy_i + 1][enemy_j] == 2) //если враг встретит игрока
+	if (board->arr[enemy_i + 1][enemy_j] == 2) //если враг встретит игрока
 	{
-		arr[enemy_i][enemy_j] = 0; //игрок становится нулем
-		arr[enemy_i + 1][enemy_j] = 7;
+		board->arr[enemy_i][enemy_j] = 0; //игрок становится нулем
+		board->arr[enemy_i + 1][enemy_j] = 7;
 		player_i = -1;//т.к. меня съели 
 		player_j = -1; //т.к. меня съели
 		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
 	}
 }
-void Matrix::EnemyUp()
+void Game::EnemyUp()
 {
 	if (enemy_i <= 0) // если player_i меньше или равно 0 и на последней строке
 		return; // я выйду из ф-ии
-	if (arr[enemy_i - 1][enemy_j] == 0)
+	if (board->arr[enemy_i - 1][enemy_j] == 0)
 	{
-		arr[enemy_i][enemy_j] = 0;
-		arr[enemy_i - 1][enemy_j] = 7;
+		board->arr[enemy_i][enemy_j] = 0;
+		board->arr[enemy_i - 1][enemy_j] = 7;
 		enemy_i--;
 		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
 	}
-	if (arr[enemy_i - 1][enemy_j] == 2)
+	if (board->arr[enemy_i - 1][enemy_j] == 2)
 	{
-		arr[enemy_i][enemy_j] = 0;
-		arr[enemy_i - 1][enemy_j] = 7;
+		board->arr[enemy_i][enemy_j] = 0;
+		board->arr[enemy_i - 1][enemy_j] = 7;
 		player_i = -1;
 		player_j = -1;
 		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
 	}
 }
-void Matrix::EnemyRight()
+void Game::EnemyRight()
 {
-	if ((enemy_j < 0) || (enemy_j > cols))
+	if ((enemy_j < 0) || (enemy_j > board->cols))
 		return;
-	if (arr[enemy_i][enemy_j + 1] == 0)
+	if (board->arr[enemy_i][enemy_j + 1] == 0)
 	{
-		arr[enemy_i][enemy_j] = 0;
-		arr[enemy_i][enemy_j + 1] = 7;
+		board->arr[enemy_i][enemy_j] = 0;
+		board->arr[enemy_i][enemy_j + 1] = 7;
 		enemy_j++;
 		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
 	}
-	if (arr[enemy_i][enemy_j + 1] == 2)
+	if (board->arr[enemy_i][enemy_j + 1] == 2)
 	{
-		arr[enemy_i][enemy_j] = 0;
-		arr[enemy_i][enemy_j + 1] = 7;
+		board->arr[enemy_i][enemy_j] = 0;
+		board->arr[enemy_i][enemy_j + 1] = 7;
 		player_i = -1;//т.к. меня съели 
 		player_j = -1; //т.к. меня съели
 		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
 	}
 }
-void Matrix::EnemyLeft()
+void Game::EnemyLeft()
 {
 	if (enemy_i < 0)
 		return;
-	if (arr[enemy_i][enemy_j - 1] == 0)
+	if (board->arr[enemy_i][enemy_j - 1] == 0)
 	{
-		arr[enemy_i][enemy_j] = 0;
-		arr[enemy_i][enemy_j - 1] = 7;
+		board->arr[enemy_i][enemy_j] = 0;
+		board->arr[enemy_i][enemy_j - 1] = 7;
 		enemy_j--;
 		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
 	}
-	if (arr[enemy_i][enemy_j - 1] == 2)
+	if (board->arr[enemy_i][enemy_j - 1] == 2)
 	{
-		arr[enemy_i][enemy_j] = 0;
-		arr[enemy_i][enemy_j - 1] = 7;
+		board->arr[enemy_i][enemy_j] = 0;
+		board->arr[enemy_i][enemy_j - 1] = 7;
 		player_i = -1;//т.к. меня съели 
 		player_j = -1;
 		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
 	}
 }
-void Matrix::RandomEnemyMove()
+void Game::RandomEnemyMove()
 {
 	for (int p=1; p>0; )
 	{
@@ -347,7 +366,7 @@ void Matrix::RandomEnemyMove()
 	}
 	return;
 }
-bool Matrix::isGameOver()
+bool Game::isGameOver()
 {
 	return (player_i == -1)&&(player_j == -1);
 	//player_j == -1 //если они равны -1, то это выражени будет true
@@ -357,7 +376,7 @@ int main()
 	srand((unsigned int)time(NULL)); // только здесь 1 раз , последовательность меняется
 	setlocale(LC_ALL, "");
 	//int rows = 20, cols = 30, k = 10, pattern = 2;
-	Matrix* matr = new Matrix(10, 10); //было (20, 30)
+	Game* matr = new Game(10, 10); //было (20, 30)
 	int** arr = NULL; //чтобы создать двумерный динамический массив, создаем указатель на массив указателей
 	//cout << "Введите количество строк и столбцов и число единиц (не равное размеру матрицы - 2): " << endl;
 	//cin >> rows >> cols >> k; 
