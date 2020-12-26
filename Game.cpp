@@ -1,4 +1,4 @@
-﻿#include <windows.h> // для цвета
+#include <windows.h> // для цвета
 #include <iostream>
 #include <iomanip> //для setw
 #include <ctime> //для генерации случайных чисел
@@ -13,6 +13,10 @@ public:
 	~Matrix();
 	void FillArray(int k); //ля заполнения игрорвого поля
 	void ShowArray();
+	int Get(int i, int j); //возвращает в ф-ю рез-т эл-т массива
+	void Set(int i, int j, int value); //присваивает эл-у массива какое то число, ф-я меняет како-то эл-т массива
+	int height();
+	int width();
 //private:
 	int** arr;//данные
 	int rows, cols;//размеры
@@ -41,6 +45,24 @@ Matrix::~Matrix() //полность удаляем нашу ОП после т�
 		delete[]arr[i];
 	}
 	delete[]arr;
+}
+
+int Matrix::Get(int i, int j)
+{
+	return arr[i][j];
+}
+void Matrix::Set(int i, int j, int value)
+{
+	arr[i][j] = value;
+}
+
+int Matrix::height()
+{
+	return rows;
+}//строки
+int Matrix::width()//столбцы
+{
+	return cols;
 }
 
 
@@ -95,12 +117,12 @@ void Game::FillArray(int k) //ф-я заполнения массива данн
 	//srand((unsigned int)time(NULL));
 	for (int p = 0; p < k;)
 	{
-		int randomRow = rand() % board->rows;
-		int randomCol = rand() % board->cols;
+		int randomRow = rand() % board->height();
+		int randomCol = rand() % board->width();
 
-		if (board->arr[randomRow][randomCol] == 0)
+		if (board->Get(randomRow, randomCol)== 0)
 		{
-			board->arr[randomRow][randomCol] = 1; //преграда
+			board->Set(randomRow, randomCol, 1); //преграда
 			p++;
 		}
 		else
@@ -111,9 +133,9 @@ void Game::FillArray(int k) //ф-я заполнения массива данн
 		player_i = rand() % board->rows;
 		player_j = rand() % board->cols;
 
-		if (board->arr[player_i][player_j] == 0)
+		if (board->Get(player_i, player_j) == 0) ///
 		{
-			board->arr[player_i][player_j] = 2;// игрок
+			board->Set(player_i, player_j, 2);// игрок ///
 			p++;
 		}
 		else
@@ -124,9 +146,9 @@ void Game::FillArray(int k) //ф-я заполнения массива данн
 		enemy_i = rand() % board->rows; //не ставить int т.к. это новые перем
 		enemy_j = rand() % board->cols;
 
-		if (board->arr[enemy_i][enemy_j] == 0)
+		if (board->arr[enemy_i][enemy_j] == 0) ///
 		{
-			board->arr[enemy_i][enemy_j] = 7; //enemy
+			board->arr[enemy_i][enemy_j] = 7; //enemy ///
 			p++;
 		}
 		else
@@ -140,31 +162,31 @@ void Game::ShowArray() //вывод массива
 	HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY); //белый
 	cout << "+";
-	for (int j = 0; j < board->cols; j++)
+	for (int j = 0; j < board->width(); j++)
 		cout << "--";
 	cout << "+" << endl;
-	for (int i = 0; i < board->rows; i++)
+	for (int i = 0; i < board->height(); i++)
 	{
 		SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY); //белый
 		cout << "|";
-		for (int j = 0; j < board->cols; j++)
+		for (int j = 0; j < board->width(); j++)
 		{
 			//для получения дискрипптора
-			if (board->arr[i][j] == 0)
+			if (board->arr[i][j] == 0) ///
 			{
 				cout << "  ";
 			}
-			if (board->arr[i][j] == 1)
+			if (board->arr[i][j] == 1) ///
 			{
 				SetConsoleTextAttribute(console, FOREGROUND_GREEN | FOREGROUND_INTENSITY); //зеленые
 				cout << "[]";
 			}
-			if (board->arr[i][j] == 2)
+			if (board->arr[i][j] == 2) ///
 			{
 				SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_INTENSITY); //белый
 				cout << "()";
 			}
-			if (board->arr[i][j] == 7)
+			if (board->arr[i][j] == 7) ///
 			{
 				SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY); //синий
 				cout << "**";
@@ -176,7 +198,7 @@ void Game::ShowArray() //вывод массива
 	}
 	SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY); //белый
 	cout << "+";
-	for (int j = 0; j < board->cols; j++)
+	for (int j = 0; j < board->width(); j++)
 		cout << "--";
 	cout << "+" << endl;
 	/*cout << "Для продолжения работы программы нажмите любую кнопку ";
@@ -185,18 +207,18 @@ void Game::ShowArray() //вывод массива
 }
 void Game::PlayerDown()
 {
-	if ((player_i < 0) || (player_i == board->rows-1)) // если меньше 0 или на последней строке 
+	if ((player_i < 0) || (player_i == board->height()-1)) // если меньше 0 или на последней строке 
 		return; // я выйду из ф-ии
-	if (board->arr[player_i + 1][player_j] == 0)
+	if (board->arr[player_i + 1][player_j] == 0) ///
 	{
-		board->arr[player_i][player_j] = 0;
-		board->arr[player_i + 1][player_j] = 2;
+		board->arr[player_i][player_j] = 0; ///
+		board->arr[player_i + 1][player_j] = 2; ///
 		player_i++; //меняем координату игрока
 		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
 	}
-	if (board->arr[player_i + 1][player_j] == 7)
+	if (board->arr[player_i + 1][player_j] == 7) /// 
 	{
-		board->arr[player_i][player_j] = 0; //игрок становится нулем
+		board->arr[player_i][player_j] = 0; //игрок становится нулем /// 
 		player_i = -1;//т.к. меня съели 
 		player_j = -1; //т.к. меня съели
 		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
@@ -207,16 +229,16 @@ void Game::PlayerUp()
 {
 	if (player_i <= 0) // если player_i меньше или равно 0 и на последней строке
 		return; // я выйду из ф-ии
-	if (board->arr[player_i - 1][player_j] == 0)
+	if (board->arr[player_i - 1][player_j] == 0) ///
 	{
-		board->arr[player_i][player_j] = 0;
-		board->arr[player_i - 1][player_j] = 2;
+		board->arr[player_i][player_j] = 0; ///
+		board->arr[player_i - 1][player_j] = 2; ///
 		player_i--;
 		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
 	}
-	if (board->arr[player_i - 1][player_j] == 7)
+	if (board->arr[player_i - 1][player_j] == 7) ///
 	{
-		board->arr[player_i][player_j] = 0;
+		board->arr[player_i][player_j] = 0; ///
 		player_i = -1;
 		player_j = -1;
 		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
@@ -224,7 +246,7 @@ void Game::PlayerUp()
 }
 void Game::PlayerRight()
 {
-	if ((player_j < 0) || (player_j > board->cols))
+	if ((player_j < 0) || (player_j > board->width()))
 		return;
 	if (board->arr[player_i][player_j + 1] == 0)
 	{
@@ -263,7 +285,7 @@ void Game::PlayerLeft()
 //Enemy
 void Game::EnemyDown()
 {
-	if ((enemy_i < 0) || (enemy_i == board->rows - 1)) // если меньше 0 или на последней строке 
+	if ((enemy_i < 0) || (enemy_i == board->height() - 1)) // если меньше 0 или на последней строке 
 		return; // я выйду из ф-ии
 	if (board->arr[enemy_i + 1][enemy_j] == 0)
 	{
@@ -303,7 +325,7 @@ void Game::EnemyUp()
 }
 void Game::EnemyRight()
 {
-	if ((enemy_j < 0) || (enemy_j > board->cols))
+	if ((enemy_j < 0) || (enemy_j > board->width()))
 		return;
 	if (board->arr[enemy_i][enemy_j + 1] == 0)
 	{
@@ -424,8 +446,7 @@ int main()
 	delete matr;
 	HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE); //для получения дискрипптора
 	SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY); //белый
-	cout << endl;
-	cout << "Программа завершена." << endl;
+	cout << "Игра завершена." << endl;
 	return 0;
 }
 
