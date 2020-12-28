@@ -4,8 +4,6 @@
 #include <ctime> //для генерации случайных чисел
 #include <conio.h> //для _getch()
 using namespace std;
-
-
 class Matrix
 {
 public:
@@ -17,7 +15,7 @@ public:
 	void Set(int i, int j, int value); //присваивает эл-у массива какое то число, ф-я меняет како-то эл-т массива
 	int height();
 	int width();
-//private:
+ //private:
 	int** arr;//данные
 	int rows, cols;//размеры
 };
@@ -55,12 +53,11 @@ void Matrix::Set(int i, int j, int value)
 {
 	arr[i][j] = value;
 }
-
 int Matrix::height()
 {
-	return rows;
+	return rows; // строки т.е. высота
 }//строки
-int Matrix::width()//столбцы
+int Matrix::width()//столбцы т.е. ширина
 {
 	return cols;
 }
@@ -98,7 +95,6 @@ void set_cursor(int x = 0, int y = 0)
 	SetConsoleCursorPosition(handle, coordinates); // SetConsoleCursorPosition Установить курсор на позицию
     // заголовка handle в координаты coordinates
 }
-
 Game::Game(int rows, int cols) //параметры в конструкторе
 {
 	board = new Matrix(20, 20);
@@ -130,8 +126,10 @@ void Game::FillArray(int k) //ф-я заполнения массива данн
 	}
 	for (int p = 0; p < 1;)    //для рандомной 2//////////////////////////////////////
 	{
-		player_i = rand() % board->rows;
-		player_j = rand() % board->cols;
+		player_i = rand() % board->height(); //(к rows могу оббращаться через board)
+		player_j = rand() % board->width();
+		//int randomRowPlayer = rand() % board->height();
+		//int randomColPlayer = rand() % board->width();
 
 		if (board->Get(player_i, player_j) == 0) ///
 		{
@@ -139,7 +137,7 @@ void Game::FillArray(int k) //ф-я заполнения массива данн
 			p++;
 		}
 		else
-			continue;
+			continue;  
 	}
 	for (int p = 0; p < 1;)    //для врагов
 	{
@@ -282,7 +280,6 @@ void Game::PlayerLeft()
 		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
 	}
 }
-//Enemy
 void Game::EnemyDown()
 {
 	if ((enemy_i < 0) || (enemy_i == board->height() - 1)) // если меньше 0 или на последней строке 
@@ -390,9 +387,12 @@ void Game::RandomEnemyMove()
 }
 bool Game::isGameOver()
 {
-	return (player_i == -1)&&(player_j == -1);
+	return (player_i == -1) && (player_j == -1);
 	//player_j == -1 //если они равны -1, то это выражени будет true
 }
+
+
+
 int main()
 {
 	srand((unsigned int)time(NULL)); // только здесь 1 раз , последовательность меняется
@@ -446,7 +446,7 @@ int main()
 	delete matr;
 	HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE); //для получения дискрипптора
 	SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY); //белый
-	cout << "Игра завершена." << endl;
+	cout << "Game over." << endl;
 	return 0;
 }
 
