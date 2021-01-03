@@ -3,67 +3,13 @@
 #include <iomanip> //для setw
 #include <ctime> //для генерации случайных чисел
 #include <conio.h> //для _getch()
+
+#include "Matrix.cpp" //т.к. Matrix.cpp находится там же где и Game.cpp
+
 using namespace std;
-class Matrix
-{
-public:
-	Matrix(int rows, int cols);
-	~Matrix();
-	void FillArray(int k); //ля заполнения игрорвого поля
-	void ShowArray();
-	int Get(int i, int j); //возвращает в ф-ю рез-т эл-т массива
-	void Set(int i, int j, int value); //присваивает эл-у массива какое то число, ф-я меняет како-то эл-т массива
-	int height();
-	int width();
- //private:
-	int** arr;//данные
-	int rows, cols;//размеры
-};
 
-Matrix::Matrix(int rows, int cols) //параметры в конструкторе
+class Game 
 {
-	this->rows = rows;
-	this->cols = cols;
-	arr = new int* [rows];  //переменная arr будет хранить указатель на указатель  
-			//мы создаем массив указателей, мы здесь будем хранить указатели  
-	for (int i = 0; i < rows; i++)
-	{
-		arr[i] = new int[cols]; /*в каждый элемент который будет хранить указатель на int мы будем присваивать новый динамический массив, размер массива будет соответсвовать переменной colls*/
-		//объявление и создание массива, выделение под него памяти5
-		for (int j = 0; j < cols; j++)
-		{
-			arr[i][j] = 0;
-		}
-	}
-}//коонструктор
-Matrix::~Matrix() //полность удаляем нашу ОП после того как поработаем с нашим массивом и он нам станет ненужен
-{
-	for (int i = 0; i < rows; i++)
-	{
-		delete[]arr[i];
-	}
-	delete[]arr;
-}
-
-int Matrix::Get(int i, int j)
-{
-	return arr[i][j];
-}
-void Matrix::Set(int i, int j, int value)
-{
-	arr[i][j] = value;
-}
-int Matrix::height()
-{
-	return rows; // строки т.е. высота
-}//строки
-int Matrix::width()//столбцы т.е. ширина
-{
-	return cols;
-}
-
-
-class Game {
 public:
 	Game(int rows, int cols);
 	~Game();
@@ -126,10 +72,8 @@ void Game::FillArray(int k) //ф-я заполнения массива данн
 	}
 	for (int p = 0; p < 1;)    //для рандомной 2//////////////////////////////////////
 	{
-		player_i = rand() % board->height(); //(к rows могу оббращаться через board)
+		player_i = rand() % board->height();
 		player_j = rand() % board->width();
-		//int randomRowPlayer = rand() % board->height();
-		//int randomColPlayer = rand() % board->width();
 
 		if (board->Get(player_i, player_j) == 0) ///
 		{
@@ -141,12 +85,13 @@ void Game::FillArray(int k) //ф-я заполнения массива данн
 	}
 	for (int p = 0; p < 1;)    //для врагов
 	{
-		enemy_i = rand() % board->rows; //не ставить int т.к. это новые перем
-		enemy_j = rand() % board->cols;
+		enemy_i = rand() % board->height(); //не ставить int т.к. это новые перем
+		enemy_j = rand() % board->width();
 
-		if (board->arr[enemy_i][enemy_j] == 0) ///
+		
+		if (board->Get(enemy_i, enemy_j) == 0) ///
 		{
-			board->arr[enemy_i][enemy_j] = 7; //enemy ///
+			board->Set(enemy_i, enemy_j, 7);// игрок ///
 			p++;
 		}
 		else
@@ -398,22 +343,22 @@ int main()
 	srand((unsigned int)time(NULL)); // только здесь 1 раз , последовательность меняется
 	setlocale(LC_ALL, "");
 	//int rows = 20, cols = 30, k = 10, pattern = 2;
-	Game* matr = new Game(10, 10); //было (20, 30)
+	Game* game = new Game(10, 10); //было (20, 30)
 	int** arr = NULL; //чтобы создать двумерный динамический массив, создаем указатель на массив указателей
 	//cout << "Введите количество строк и столбцов и число единиц (не равное размеру матрицы - 2): " << endl;
 	//cin >> rows >> cols >> k; 
 	
 	bool escape_pressed = false; //для выхода их программы
 	//arr = CreateArray(rows, cols);
-	matr->FillArray(1); //параметр k - преграда
-	matr->ShowArray();
-	for (int i = 1; (!escape_pressed) && (!matr->isGameOver()); i++)
+	game->FillArray(1); //параметр k - преграда
+	game->ShowArray();
+	for (int i = 1; (!escape_pressed) && (!game->isGameOver()); i++)
 	{
 		Sleep(70);
 		if (i % 5 == 0) //каждое 5-ое i выводить случайное движение врага, 5:5 = 0, без остатка
 		{
-			matr->RandomEnemyMove();
-			matr->ShowArray();
+			game->RandomEnemyMove();
+			game->ShowArray();
 		}
 		if (_kbhit())
 		{
@@ -423,27 +368,27 @@ int main()
 				escape_pressed = true;
 				break;
 			case 72:
-				matr->PlayerUp();
-				matr->ShowArray();
+				game->PlayerUp();
+				game->ShowArray();
 				break;
 			case 80:
-				matr->PlayerDown();
-				matr->ShowArray();
+				game->PlayerDown();
+				game->ShowArray();
 				break;
 
 			case 75:
-				matr->PlayerLeft();
-				matr->ShowArray();
+				game->PlayerLeft();
+				game->ShowArray();
 				break;
 
 			case 77:
-				matr->PlayerRight();
-				matr->ShowArray();
+				game->PlayerRight();
+				game->ShowArray();
 				break;
 			}
 		}
 	}
-	delete matr;
+	delete game;
 	HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE); //для получения дискрипптора
 	SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY); //белый
 	cout << "Game over." << endl;
