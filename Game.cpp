@@ -115,7 +115,7 @@ void Game::ShowArray() //вывод массива
 		for (int j = 0; j < board->width(); j++)
 		{
 			//для получения дискрипптора
-			if (board->arr[i][j] == 0) ///
+			if (board->arr[i][j] == 0) /// 
 			{
 				cout << "  ";
 			}
@@ -152,16 +152,16 @@ void Game::PlayerDown()
 {
 	if ((player_i < 0) || (player_i == board->height()-1)) // если меньше 0 или на последней строке 
 		return; // я выйду из ф-ии
-	if (board->arr[player_i + 1][player_j] == 0) ///
+	if (board->Get(player_i+1, player_j) == 0) /// board->Get(player_i, player_j)
 	{
-		board->arr[player_i][player_j] = 0; ///
-		board->arr[player_i + 1][player_j] = 2; ///
+		board->Set(player_i, player_j, 0); ///
+		board->Set(player_i+1, player_j, 2); ///
 		player_i++; //меняем координату игрока
 		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
 	}
-	if (board->arr[player_i + 1][player_j] == 7) /// 
+	if (board->Get(player_i + 1, player_j) == 7) /// 
 	{
-		board->arr[player_i][player_j] = 0; //игрок становится нулем /// 
+		board->Set(player_i, player_j, 0); //игрок становится нулем /// 
 		player_i = -1;//т.к. меня съели 
 		player_j = -1; //т.к. меня съели
 		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
@@ -172,16 +172,16 @@ void Game::PlayerUp()
 {
 	if (player_i <= 0) // если player_i меньше или равно 0 и на последней строке
 		return; // я выйду из ф-ии
-	if (board->arr[player_i - 1][player_j] == 0) ///
+	if (board->Get(player_i - 1, player_j) == 0)  ///
 	{
-		board->arr[player_i][player_j] = 0; ///
-		board->arr[player_i - 1][player_j] = 2; ///
+		board->Set(player_i, player_j, 0); ///
+		board->Set(player_i - 1, player_j, 2); ///
 		player_i--;
 		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
 	}
-	if (board->arr[player_i - 1][player_j] == 7) ///
+	if (board->Get(player_i - 1, player_j) == 7) ///
 	{
-		board->arr[player_i][player_j] = 0; ///
+		board->Set(player_i, player_j, 0); ///
 		player_i = -1;
 		player_j = -1;
 		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
@@ -191,16 +191,16 @@ void Game::PlayerRight()
 {
 	if ((player_j < 0) || (player_j > board->width()))
 		return;
-	if (board->arr[player_i][player_j + 1] == 0)
+	if (board->Get(player_i, player_j+1) == 0)
 	{
-		board->arr[player_i][player_j] = 0;
-		board->arr[player_i][player_j + 1] = 2;
+		board->Set(player_i, player_j, 0);
+		board->Set(player_i, player_j + 1, 2);
 		player_j++;
 		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
 	}
-	if (board->arr[player_i][player_j + 1] == 7)
+	if (board->Get(player_i, player_j + 1) == 7)
 	{
-		board->arr[player_i][player_j] = 0;
+		board->Set(player_i, player_j, 0);
 		player_i = -1;//т.к. меня съели 
 		player_j = -1; //т.к. меня съели
 		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
@@ -210,36 +210,38 @@ void Game::PlayerLeft()
 {
 	if (player_j < 0)
 		return;
-	if (board->arr[player_i][player_j - 1] == 0)
+	if (board->Get(player_i, player_j - 1) == 0)
 	{
-		board->arr[player_i][player_j] = 0;
-		board->arr[player_i][player_j - 1] = 2;
+		board->Set(player_i, player_j, 0);
+		board->Set(player_i, player_j - 1, 2);
 		player_j--;
 		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
 	}
-	if (board->arr[player_i][player_j - 1] == 7)
+	if (board->Get(player_i, player_j - 1) == 7)
 	{
-		board->arr[player_i][player_j] = 0;
+		board->Set(player_i, player_j, 0);
 		player_i = -1;//т.к. меня съели 
 		player_j = -1;
 		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
 	}
 }
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void Game::EnemyDown()
 {
 	if ((enemy_i < 0) || (enemy_i == board->height() - 1)) // если меньше 0 или на последней строке 
 		return; // я выйду из ф-ии
-	if (board->arr[enemy_i + 1][enemy_j] == 0)
+	if (board->Get(enemy_i + 1, enemy_j) == 0) //	if (board->Get(enemy_i+1, enemy_j) == 0)
 	{
-		board->arr[enemy_i][enemy_j] = 0;
-		board->arr[enemy_i + 1][enemy_j] = 7;
+		board->Set(enemy_i, enemy_j, 0); //		board->Set(enemy_i, enemy_j, 0);
+		board->Set(enemy_i+1, enemy_j, 7);
 		enemy_i++; //меняем координату игрока
 		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
 	}
-	if (board->arr[enemy_i + 1][enemy_j] == 2) //если враг встретит игрока
+	if (board->Get(enemy_i + 1, enemy_j) == 2) //если враг встретит игрока
 	{
-		board->arr[enemy_i][enemy_j] = 0; //игрок становится нулем
-		board->arr[enemy_i + 1][enemy_j] = 7;
+		board->Set(enemy_i, enemy_j, 0);  //игрок становится нулем
+		board->Set(enemy_i + 1, enemy_j, 7);
 		player_i = -1;//т.к. меня съели 
 		player_j = -1; //т.к. меня съели
 		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
@@ -249,17 +251,17 @@ void Game::EnemyUp()
 {
 	if (enemy_i <= 0) // если player_i меньше или равно 0 и на последней строке
 		return; // я выйду из ф-ии
-	if (board->arr[enemy_i - 1][enemy_j] == 0)
+	if (board->Get(enemy_i - 1, enemy_j) == 0)
 	{
-		board->arr[enemy_i][enemy_j] = 0;
-		board->arr[enemy_i - 1][enemy_j] = 7;
+		board->Set(enemy_i, enemy_j, 0); 
+		board->Set(enemy_i - 1, enemy_j, 7);
 		enemy_i--;
 		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
 	}
-	if (board->arr[enemy_i - 1][enemy_j] == 2)
+	if (board->Get(enemy_i - 1, enemy_j) == 2) 
 	{
-		board->arr[enemy_i][enemy_j] = 0;
-		board->arr[enemy_i - 1][enemy_j] = 7;
+		board->Set(enemy_i, enemy_j, 0);
+		board->Set(enemy_i - 1, enemy_j, 7);
 		player_i = -1;
 		player_j = -1;
 		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
@@ -269,17 +271,17 @@ void Game::EnemyRight()
 {
 	if ((enemy_j < 0) || (enemy_j > board->width()))
 		return;
-	if (board->arr[enemy_i][enemy_j + 1] == 0)
+	if (board->Get(enemy_i, enemy_j + 1) == 0) 
 	{
-		board->arr[enemy_i][enemy_j] = 0;
-		board->arr[enemy_i][enemy_j + 1] = 7;
+		board->Set(enemy_i, enemy_j, 0);
+		board->Set(enemy_i, enemy_j+1, 7);
 		enemy_j++;
 		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
 	}
-	if (board->arr[enemy_i][enemy_j + 1] == 2)
+	if (board->Get(enemy_i, enemy_j + 1) == 2)
 	{
-		board->arr[enemy_i][enemy_j] = 0;
-		board->arr[enemy_i][enemy_j + 1] = 7;
+		board->Set(enemy_i, enemy_j, 0);
+		board->Set(enemy_i, enemy_j + 1, 7);
 		player_i = -1;//т.к. меня съели 
 		player_j = -1; //т.к. меня съели
 		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
@@ -289,17 +291,17 @@ void Game::EnemyLeft()
 {
 	if (enemy_i < 0)
 		return;
-	if (board->arr[enemy_i][enemy_j - 1] == 0)
+	if (board->Get(enemy_i, enemy_j - 1) == 0)
 	{
-		board->arr[enemy_i][enemy_j] = 0;
-		board->arr[enemy_i][enemy_j - 1] = 7;
+		board->Set(enemy_i, enemy_j, 0);
+		board->Set(enemy_i, enemy_j - 1, 7);
 		enemy_j--;
 		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
 	}
-	if (board->arr[enemy_i][enemy_j - 1] == 2)
+	if (board->Get(enemy_i, enemy_j - 1) == 2)
 	{
-		board->arr[enemy_i][enemy_j] = 0;
-		board->arr[enemy_i][enemy_j - 1] = 7;
+		board->Set(enemy_i, enemy_j, 0);
+		board->Set(enemy_i, enemy_j - 1, 7);
 		player_i = -1;//т.к. меня съели 
 		player_j = -1;
 		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел

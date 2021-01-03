@@ -7,7 +7,7 @@ public:
 	void Set(int i, int j, int value); //присваивает эл-у массива какое то число, ф-я меняет како-то эл-т массива
 	int height();
 	int width();
- //private:
+private:
 	int** arr;//данные
 	int rows, cols;//размеры
 };
