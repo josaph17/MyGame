@@ -115,21 +115,21 @@ void Game::ShowArray() //вывод массива
 		for (int j = 0; j < board->width(); j++)
 		{
 			//для получения дискрипптора
-			if (board->arr[i][j] == 0) /// 
+			if (board->Get(i, j) == 0) ///  		
 			{
 				cout << "  ";
 			}
-			if (board->arr[i][j] == 1) ///
+			if (board->Get(i, j) == 1) ///
 			{
 				SetConsoleTextAttribute(console, FOREGROUND_GREEN | FOREGROUND_INTENSITY); //зеленые
 				cout << "[]";
 			}
-			if (board->arr[i][j] == 2) ///
+			if (board->Get(i, j) == 2) ///
 			{
 				SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_INTENSITY); //белый
 				cout << "()";
 			}
-			if (board->arr[i][j] == 7) ///
+			if (board->Get(i, j) == 7) ///
 			{
 				SetConsoleTextAttribute(console, FOREGROUND_BLUE | FOREGROUND_INTENSITY); //синий
 				cout << "**";
