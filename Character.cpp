@@ -1,8 +1,10 @@
-class Character 
+#include "Matrix.cpp" 
+
+class Personage 
 { //тело класса
 public:
-	Characters();
-	~Characters();
+	Personage();
+	~Personage();
 	void GoDown();
 	void GoUp();
 	void GoRight();
@@ -10,22 +12,24 @@ public:
 	int GetX(valueX);
 	int GetY(valueY);
 private:
+	Matrix* board;
 	int coodrinate_x, coordinate_y;
 };
 
-Character::Character() //параметры в конструкторе
+Personage::Personage() //параметры в конструкторе
 {
+	board = new Matrix(20, 20);
 	this -> coodrinate_x = coodrinate_x;
 	this-> coordinate_y = coordinate_y;
-	coodrinate_x = -1; //это означает что игрока нет
-	coordinate_y = -1; //это означает что игрока нет
+	//coodrinate_x = -1; //Ты присваиваешь -1 тем переменным (параметрам), которые сейчас удалятся.
+	//coordinate_y = -1; //смысла в этом нет
 }
-Character::~Characters() 
+Personage::~Personage() 
 {
-
+	delete board;
 }
 
-void Character::GoDown()
+void Personage::GoDown()
 {
 	if ((coodrinate_x < 0) || (coodrinate_x == board->height()-1)) // если меньше 0 или на последней строке 
 		return; // я выйду из ф-ии
@@ -37,7 +41,7 @@ void Character::GoDown()
 		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел.
 	}
 }
-void Character::GoUp()
+void Personage::GoUp()
 {
 	if (coordinate_x <= 0) // если coordinate_x меньше или равно 0 и на последней строке
 		return; // я выйду из ф-ии
@@ -49,7 +53,7 @@ void Character::GoUp()
 		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
 	}
 }
-void Character::GoRight()
+void Personage::GoRight()
 {
 	if ((coordinate_y < 0) || (coordinate_y > board->width()))
 		return;
@@ -61,7 +65,7 @@ void Character::GoRight()
 		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
 	}
 }
-void Character::GoLeft()
+void Personage::GoLeft()
 {
 	if (coordinate_y < 0)
 		return;
@@ -73,19 +77,19 @@ void Character::GoLeft()
 		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
 	}
 }
-int Character::GetX()
+int Personage::GetX()
 {
 	return coodrinate_x;
 }
-int Character::GetY()
+int Personage::GetY()
 {
 	return coodrinate_y;
 }
-void Character::SetX(valueX)
+void Personage::SetX(valueX)
 {
 	coodrinate_x = valueX;
 }
-void Character::SetY(valueY)
+void Personage::SetY(valueY)
 {
 	coodrinate_y = valueY;
 }
