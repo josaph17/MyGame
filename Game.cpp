@@ -4,7 +4,8 @@
 #include <ctime> //для генерации случайных чисел
 #include <conio.h> //для _getch()
 
-#include "Matrix.cpp" //т.к. Matrix.cpp находится там же где и Game.cpp
+#include "Matrix.h" //т.к. Matrix.cpp находится там же где и Game.cpp
+#include "Personage.h"
 
 using namespace std;
 
@@ -26,7 +27,8 @@ public:
 	void RandomEnemyMove();
 	bool isGameOver();
 private:
-	Matrix*board;
+	Matrix* board;
+	Personage* player;
 	int player_i, player_j;
 	int enemy_i, enemy_j;
 };
@@ -44,6 +46,7 @@ void set_cursor(int x = 0, int y = 0)
 Game::Game(int rows, int cols) //параметры в конструкторе
 {
 	board = new Matrix(20, 20);
+	player = new Personage(-1, -1, board);
 	player_i = -1; //это означает что игрока нет
 	player_j = -1; //это означает что игрока нет
 	enemy_i = -1;
@@ -72,8 +75,8 @@ void Game::FillArray(int k) //ф-я заполнения массива данн
 	}
 	for (int p = 0; p < 1;)    //для рандомной 2//////////////////////////////////////
 	{
-		player_i = rand() % board->height();
-		player_j = rand() % board->width();
+		player->SetY(rand() % board->height()); //для i
+		playerplayer_j = rand() % board->width(); //
 
 		if (board->Get(player_i, player_j) == 0) ///
 		{
@@ -225,8 +228,6 @@ void Game::PlayerLeft()
 		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
 	}
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 void Game::EnemyDown()
 {
 	if ((enemy_i < 0) || (enemy_i == board->height() - 1)) // если меньше 0 или на последней строке 

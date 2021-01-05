@@ -1,43 +1,28 @@
-#include "Matrix.cpp" 
+#include "Personage.h"
+#include "Matrix.h" 
 
-class Personage 
-{ //тело класса
-public:
-	Personage();
-	~Personage();
-	void GoDown();
-	void GoUp();
-	void GoRight();
-	void GoLeft();
-	int GetX(valueX);
-	int GetY(valueY);
-private:
-	Matrix* board;
-	int coodrinate_x, coordinate_y;
-};
-
-Personage::Personage() //параметры в конструкторе
+Personage::Personage(int coordinate_x, int coordinate_y, Matrix* board) //параметры в конструкторе
 {
-	board = new Matrix(20, 20);
-	this -> coodrinate_x = coodrinate_x;
-	this-> coordinate_y = coordinate_y;
-	//coodrinate_x = -1; //Ты присваиваешь -1 тем переменным (параметрам), которые сейчас удалятся.
-	//coordinate_y = -1; //смысла в этом нет
+	this->board = board;
+	this->coordinate_x = coordinate_x;
+	this->coordinate_y = coordinate_y;
+	//coordinate_x = -1; //Ты присваиваешь -1 тем переменным (параметрам), которые сейчас удалятся.
+	//coordinate_y = -1; //смысла в этом нет/
 }
 Personage::~Personage() 
 {
-	delete board;
+
 }
 
 void Personage::GoDown()
 {
-	if ((coodrinate_x < 0) || (coodrinate_x == board->height()-1)) // если меньше 0 или на последней строке 
+	if ((coordinate_x < 0) || (coordinate_x == board->height()-1)) // если меньше 0 или на последней строке 
 		return; // я выйду из ф-ии
-	if (board->Get(coodrinate_x +1, coodrinate_x) == 0) /// board->Get(coordinate_x, coordinate_y)
+	if (board->Get(coordinate_x +1, coordinate_x) == 0) /// board->Get(coordinate_x, coordinate_y)
 	{
-		board->Set(coodrinate_x, coordinate_y, 0); ///
-		board->Set(coodrinate_x +1, coordinate_y, 2); ///
-		coodrinate_x++; //меняем координату игрока
+		board->Set(coordinate_x, coordinate_y, 0); ///
+		board->Set(coordinate_x +1, coordinate_y, 2); ///
+		coordinate_x++; //меняем координату игрока
 		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел.
 	}
 }
@@ -79,19 +64,19 @@ void Personage::GoLeft()
 }
 int Personage::GetX()
 {
-	return coodrinate_x;
+	return coordinate_x;
 }
 int Personage::GetY()
 {
-	return coodrinate_y;
+	return coordinate_y;
 }
-void Personage::SetX(valueX)
+void Personage::SetX(int valueX)
 {
-	coodrinate_x = valueX;
+	coordinate_x = valueX;
 }
-void Personage::SetY(valueY)
+void Personage::SetY(int valueY)
 {
-	coodrinate_y = valueY;
+	coordinate_y = valueY;
 }
 
 
