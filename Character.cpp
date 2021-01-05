@@ -1,24 +1,29 @@
 class Character 
 { //тело класса
 public:
-	Characters(int coodrinate_x, int coordinate_y);
+	Characters();
 	~Characters();
 	void GoDown();
 	void GoUp();
 	void GoRight();
 	void GoLeft();
+	int GetX(valueX);
+	int GetY(valueY);
 private:
 	int coodrinate_x, coordinate_y;
 };
 
-Character::Character(int coodrinate_x, int coordinate_y) //параметры в конструкторе
+Character::Character() //параметры в конструкторе
 {
 	this -> coodrinate_x = coodrinate_x;
 	this-> coordinate_y = coordinate_y;
 	coodrinate_x = -1; //это означает что игрока нет
 	coordinate_y = -1; //это означает что игрока нет
 }
-~Characters();
+Character::~Characters() 
+{
+
+}
 
 void Character::GoDown()
 {
@@ -68,6 +73,23 @@ void Character::GoLeft()
 		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
 	}
 }
+int Character::GetX()
+{
+	return coodrinate_x;
+}
+int Character::GetY()
+{
+	return coodrinate_y;
+}
+void Character::SetX(valueX)
+{
+	coodrinate_x = valueX;
+}
+void Character::SetY(valueY)
+{
+	coodrinate_y = valueY;
+}
+
 
 
 
