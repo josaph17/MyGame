@@ -16,50 +16,38 @@ Personage::~Personage()
 
 void Personage::GoDown()
 {
-	if ((coordinate_x < 0) || (coordinate_x == board->height()-1)) // если меньше 0 или на последней строке 
-		return; // я выйду из ф-ии
-	if (board->Get(coordinate_x +1, coordinate_x) == 0) /// board->Get(coordinate_x, coordinate_y)
+	if ((coordinate_y < board->height() - 1) && (board->Get(coordinate_y + 1, coordinate_x) == 0))
 	{
-		board->Set(coordinate_x, coordinate_y, 0); ///
-		board->Set(coordinate_x +1, coordinate_y, 2); ///
-		coordinate_x++; //меняем координату игрока
-		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел.
+		board->Set(coordinate_y, coordinate_x, 0); ///
+		board->Set(coordinate_y+1, coordinate_x, 2); ///
+		coordinate_y++;
 	}
 }
 void Personage::GoUp()
 {
-	if (coordinate_x <= 0) // если coordinate_x меньше или равно 0 и на последней строке
-		return; // я выйду из ф-ии
-	if (board->Get(coordinate_x - 1, coordinate_y) == 0)  ///
+	if ((coordinate_y > 0) && (board->Get(coordinate_y - 1, coordinate_x) == 0))
 	{
-		board->Set(coordinate_x, coordinate_y, 0); ///
-		board->Set(coordinate_x - 1, coordinate_y, 2); ///
-		coordinate_x--;
-		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
+		board->Set(coordinate_y, coordinate_x, 0); ///
+		board->Set(coordinate_y - 1, coordinate_x, 2); ///
+		coordinate_y--;
 	}
 }
 void Personage::GoRight()
 {
-	if ((coordinate_y < 0) || (coordinate_y > board->width()))
-		return;
-	if (board->Get(coordinate_x, coordinate_y+1) == 0)
+	if ((coordinate_x < board->width()) && ((board->Get(coordinate_y, coordinate_x + 1) == 0)))
 	{
-		board->Set(coordinate_x, coordinate_y, 0);
-		board->Set(coordinate_x, coordinate_y + 1, 2);
-		coordinate_y++;
-		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
+		board->Set(coordinate_y, coordinate_x, 0); ///
+		board->Set(coordinate_y, coordinate_x+1, 2); ///
+		coordinate_x++;
 	}
 }
 void Personage::GoLeft()
 {
-	if (coordinate_y < 0)
-		return;
-	if (board->Get(coordinate_x, coordinate_y - 1) == 0)
+	if ((coordinate_x > 0) && ((board->Get(coordinate_y, coordinate_x - 1) == 0)))
 	{
-		board->Set(coordinate_x, coordinate_y, 0);
-		board->Set(coordinate_x, coordinate_y - 1, 2);
-		coordinate_y--;
-		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
+		board->Set(coordinate_y, coordinate_x, 0); ///
+		board->Set(coordinate_y, coordinate_x - 1, 2); ///
+		coordinate_x--;
 	}
 }
 int Personage::GetX()

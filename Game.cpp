@@ -153,80 +153,19 @@ void Game::ShowArray() //вывод массива
 }
 void Game::PlayerDown()
 {
-	if ((player->GetY() < 0) || (player->GetY() == board->height()-1)) // если меньше 0 или на последней строке  
-		return; // я выйду из ф-ии
-	if (board->Get(player->GetY()+1, player->GetX()) == 0) /// board->Get(player_i, player_j)
-	{
-		board->Set(player->GetY(), player->GetX(), 0); ///
-		board->Set(player->GetY()+1, player->GetX(), 2); ///
-		player->SetY(player->GetY()+1); //меняем координату игрока, заменил инкапсуляцию
-		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
-	}
-	if (board->Get(player->GetY() + 1, player->GetX()) == 7) /// 
-	{
-		board->Set(player->GetY(), player->GetX(), 0); //игрок становится нулем /// 
-		player->SetY(-1);//т.к. меня съели ось y=-1=i
-		player->SetX(-1); //т.к. меня съели
-		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
-	}
-	
+	player->GoDown();
 }
 void Game::PlayerUp()
 {
-	if (player->GetY() <= 0) // если player_i меньше или равно 0 и на последней строке
-		return; // я выйду из ф-ии
-	if (board->Get(player->GetY() - 1, player->GetX()) == 0)  ///
-	{
-		board->Set(player->GetY(), player->GetX(), 0); ///
-		board->Set(player->GetY() - 1, player->GetX(), 2); ///
-		player->SetY(player->GetY() - 1);
-		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
-	}
-	if (board->Get(player->GetY() - 1, player_j) == 7) ///
-	{
-		board->Set(player->GetY(), player_j, 0); ///
-		player->SetY(-1);
-		player->SetX(-1);
-		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
-	}
+	player->GoUp();
 }
 void Game::PlayerRight()
 {
-	if ((player->GetX() < 0) || (player->GetX() > board->width()))
-		return;
-	if (board->Get(player->GetY(), player->GetX()+1) == 0)
-	{
-		board->Set(player->GetY(), player->GetX(), 0);
-		board->Set(player->GetY(), player->GetX() + 1, 2);
-		player->SetX(player->GetX() + 1);
-		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
-	}
-	if (board->Get(player->GetY(), player->GetX() + 1) == 7)
-	{
-		board->Set(player->GetY(), player->GetX(), 0);
-		player->SetY(-1);
-		player->SetX(-1);
-		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
-	}
+	player->GoRight();
 }
 void Game::PlayerLeft()
 {
-	if (player->GetX() < 0)
-		return;
-	if (board->Get(player->GetY(), player->GetX() - 1) == 0)
-	{
-		board->Set(player->GetY(), player->GetX(), 0);
-		board->Set(player->GetY(), player->GetX() - 1, 2);
-		player->SetX(player->GetX() - 1); // мзменил положение
-		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
-	}
-	if (board->Get(player->GetY(), player->GetX() - 1) == 7)
-	{
-		board->Set(player->GetY(), player->GetX(), 0);
-		player->SetY(-1);
-		player->SetX(-1);
-		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
-	}
+	player->GoLeft();
 }
 void Game::EnemyDown()
 {
