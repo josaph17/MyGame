@@ -29,6 +29,7 @@ public:
 private:
 	Matrix* board;
 	Personage* player;
+	Personage* enemy;
 	int player_i, player_j;
 	int enemy_i, enemy_j;
 };
@@ -47,6 +48,7 @@ Game::Game(int rows, int cols) //параметры в конструкторе
 {
 	board = new Matrix(20, 20);
 	player = new Personage(-1, -1, board);
+	enemy = new Personage(-1, -1, board);
 	player_i = -1; //это означает что игрока нет
 	player_j = -1; //это означает что игрока нет
 	enemy_i = -1;
@@ -88,13 +90,13 @@ void Game::FillArray(int k) //ф-я заполнения массива данн
 	}
 	for (int p = 0; p < 1;)    //для врагов
 	{
-		enemy_i = rand() % board->height(); //не ставить int т.к. это новые перем
-		enemy_j = rand() % board->width();
+		enemy->SetY(rand() % board->height());
+		enemy->SetX(rand() % board->width());
 
 		
-		if (board->Get(enemy_i, enemy_j) == 0) ///
+		if (board->Get(enemy->GetY(), enemy->GetX()) == 0) ///
 		{
-			board->Set(enemy_i, enemy_j, 7);// враг ///
+			board->Set(enemy->GetY(), enemy->GetX(), 7);// враг ///
 			p++;
 		}
 		else
@@ -153,99 +155,35 @@ void Game::ShowArray() //вывод массива
 }
 void Game::PlayerDown()
 {
-	player->GoDown();
+	player->GoDown(2);
 }
 void Game::PlayerUp()
 {
-	player->GoUp();
+	player->GoUp(2);
 }
 void Game::PlayerRight()
 {
-	player->GoRight();
+	player->GoRight(2);
 }
 void Game::PlayerLeft()
 {
-	player->GoLeft();
+	player->GoLeft(2);
 }
 void Game::EnemyDown()
 {
-	if ((enemy_i < 0) || (enemy_i == board->height() - 1)) // если меньше 0 или на последней строке 
-		return; // я выйду из ф-ии
-	if (board->Get(enemy_i + 1, enemy_j) == 0) //	if (board->Get(enemy_i+1, enemy_j) == 0)
-	{
-		board->Set(enemy_i, enemy_j, 0); //		board->Set(enemy_i, enemy_j, 0);
-		board->Set(enemy_i+1, enemy_j, 7);
-		enemy_i++; //меняем координату игрока
-		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
-	}
-	if (board->Get(enemy_i + 1, enemy_j) == 2) //если враг встретит игрока
-	{
-		board->Set(enemy_i, enemy_j, 0);  //игрок становится нулем
-		board->Set(enemy_i + 1, enemy_j, 7);
-		player->SetY(-1);
-		player->SetX(-1);
-		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
-	}
+	enemy->GoDown(7);
 }
 void Game::EnemyUp()
 {
-	if (enemy_i <= 0) // если player_i меньше или равно 0 и на последней строке
-		return; // я выйду из ф-ии
-	if (board->Get(enemy_i - 1, enemy_j) == 0)
-	{
-		board->Set(enemy_i, enemy_j, 0); 
-		board->Set(enemy_i - 1, enemy_j, 7);
-		enemy_i--;
-		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
-	}
-	if (board->Get(enemy_i - 1, enemy_j) == 2) 
-	{
-		board->Set(enemy_i, enemy_j, 0);
-		board->Set(enemy_i - 1, enemy_j, 7);
-		player->SetY(-1);
-		player->SetX(-1);
-		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
-	}
+	enemy->GoUp(7);
 }
 void Game::EnemyRight()
 {
-	if ((enemy_j < 0) || (enemy_j > board->width()))
-		return;
-	if (board->Get(enemy_i, enemy_j + 1) == 0) 
-	{
-		board->Set(enemy_i, enemy_j, 0);
-		board->Set(enemy_i, enemy_j+1, 7);
-		enemy_j++;
-		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
-	}
-	if (board->Get(enemy_i, enemy_j + 1) == 2)
-	{
-		board->Set(enemy_i, enemy_j, 0);
-		board->Set(enemy_i, enemy_j + 1, 7);
-		player->SetY(-1);
-		player->SetX(-1);
-		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
-	}
+	enemy->GoRight(7);
 }
 void Game::EnemyLeft()
 {
-	if (enemy_i < 0)
-		return;
-	if (board->Get(enemy_i, enemy_j - 1) == 0)
-	{
-		board->Set(enemy_i, enemy_j, 0);
-		board->Set(enemy_i, enemy_j - 1, 7);
-		enemy_j--;
-		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
-	}
-	if (board->Get(enemy_i, enemy_j - 1) == 2)
-	{
-		board->Set(enemy_i, enemy_j, 0);
-		board->Set(enemy_i, enemy_j - 1, 7);
-		player->SetY(-1);
-		player->SetX(-1);
-		return; // этот оператор нужен нам чтобы выйти из ф-ии, чтобы цикл прошел 1 раз и вышел
-	}
+	enemy->GoLeft(7);
 }
 void Game::RandomEnemyMove()
 {
@@ -256,16 +194,16 @@ void Game::RandomEnemyMove()
 		switch (randomMove)
 		{
 		case 1:
-			EnemyDown();
+			enemy->GoDown(7);
 			break;
 		case 2:
-			EnemyUp();
+			enemy->GoUp(7);
 			break;
 		case 3:
-			EnemyRight();
+			enemy->GoRight(7);
 			break;
 		case 4:
-			EnemyLeft();
+			enemy->GoLeft(7);
 			break;
 		}
 		return;// чтобы выйти из ф-ии randomMove после совершения движения, return выходит из ф-ии в котор
