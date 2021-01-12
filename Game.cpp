@@ -20,18 +20,13 @@ public:
 	void PlayerUp();
 	void PlayerRight();
 	void PlayerLeft();
-	void EnemyDown();
-	void EnemyUp();
-	void EnemyRight();
-	void EnemyLeft();
+	//у тебя в main-е нигде же не вызывается перемещение вра следовательно, эти функции не нужны
 	void RandomEnemyMove();
 	bool isGameOver();
 private:
 	Matrix* board;
 	Personage* player;
 	Personage* enemy;
-	int player_i, player_j;
-	int enemy_i, enemy_j;
 };
 
 void set_cursor(int x = 0, int y = 0)
@@ -46,17 +41,16 @@ void set_cursor(int x = 0, int y = 0)
 }
 Game::Game(int rows, int cols) //параметры в конструкторе
 {
-	board = new Matrix(20, 20);
-	player = new Personage(-1, -1, board);
-	enemy = new Personage(-1, -1, board);
-	player_i = -1; //это означает что игрока нет
-	player_j = -1; //это означает что игрока нет
-	enemy_i = -1;
-	enemy_j = -1;
+	board = new Matrix(20, 20); 
+	player = new Personage(-1, -1, board, 2); /*при помощи оператора new - создаём объекты, 
+    а при помощи оператора присваивания - инициализируем переменные (указатели) player и enemy*/
+	enemy = new Personage(-1, -1, board, 7);
 }//коонструктор
 Game::~Game() //полность удаляем нашу ОП после того как поработаем с нашим массивом и он нам станет ненужен
 {
 	delete board;
+	delete player;
+	delete enemy;
 }
 
 void Game::FillArray(int k) //ф-я заполнения массива данными, &arr т.к.  ассив меняется и адрес тоже
@@ -155,35 +149,19 @@ void Game::ShowArray() //вывод массива
 }
 void Game::PlayerDown()
 {
-	player->GoDown(2);
+	player->GoDown();
 }
 void Game::PlayerUp()
 {
-	player->GoUp(2);
+	player->GoUp();
 }
 void Game::PlayerRight()
 {
-	player->GoRight(2);
+	player->GoRight();
 }
 void Game::PlayerLeft()
 {
-	player->GoLeft(2);
-}
-void Game::EnemyDown()
-{
-	enemy->GoDown(7);
-}
-void Game::EnemyUp()
-{
-	enemy->GoUp(7);
-}
-void Game::EnemyRight()
-{
-	enemy->GoRight(7);
-}
-void Game::EnemyLeft()
-{
-	enemy->GoLeft(7);
+	player->GoLeft();
 }
 void Game::RandomEnemyMove()
 {
@@ -194,16 +172,16 @@ void Game::RandomEnemyMove()
 		switch (randomMove)
 		{
 		case 1:
-			enemy->GoDown(7);
+			enemy->GoDown();
 			break;
 		case 2:
-			enemy->GoUp(7);
+			enemy->GoUp();
 			break;
 		case 3:
-			enemy->GoRight(7);
+			enemy->GoRight();
 			break;
 		case 4:
-			enemy->GoLeft(7);
+			enemy->GoLeft();
 			break;
 		}
 		return;// чтобы выйти из ф-ии randomMove после совершения движения, return выходит из ф-ии в котор

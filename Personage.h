@@ -4,12 +4,12 @@
 class Personage 
 { //тело класса
 public:
-	Personage(int coordinate_x, int coordinate_y, Matrix* board);
+	Personage(int coordinate_x, int coordinate_y, Matrix* board, int personage_value);
 	~Personage();
-	void GoDown(int personage_value);
-	void GoUp(int personage_value);
-	void GoRight(int personage_value);
-	void GoLeft(int personage_value);
+	void GoDown();
+	void GoUp();
+	void GoRight();
+	void GoLeft();
 	int GetX();
 	int GetY();
 	void SetX(int valueX);
@@ -17,7 +17,7 @@ public:
 private:
 	Matrix* board;
 	int coordinate_x, coordinate_y;
-	//int personage_value;
+	int personage_value;
 };
 
 
