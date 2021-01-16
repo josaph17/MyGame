@@ -67,6 +67,14 @@ void Personage::SetY(int valueY)
 {
 	coordinate_y = valueY;
 }
+int Personage::GetValue()
+{
+	return personage_value;
+}
+void Personage::SetValue(int valueNew)
+{
+	personage_value = valueNew;
+}
 
 
 

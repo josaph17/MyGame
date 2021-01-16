@@ -6,10 +6,12 @@
 
 #include "Matrix.h" //т.к. Matrix.cpp находится там же где и Game.cpp
 #include "Personage.h"
+#include "Player.h"
+#include "Enemy.h"
 
 using namespace std;
 
-class Game 
+class Game
 {
 public:
 	Game(int rows, int cols);
@@ -23,10 +25,10 @@ public:
 	//у тебя в main-е нигде же не вызывается перемещение вра следовательно, эти функции не нужны
 	void RandomEnemyMove();
 	bool isGameOver();
-private:
+ private:
 	Matrix* board;
-	Personage* player;
-	Personage* enemy;
+	Player* player;
+	Enemy* enemy;
 };
 
 void set_cursor(int x = 0, int y = 0)
@@ -36,22 +38,22 @@ void set_cursor(int x = 0, int y = 0)
 	handle = GetStdHandle(STD_OUTPUT_HANDLE);
 	coordinates.X = x; //задаем координаты для X
 	coordinates.Y = y; //задаем координаты для Y
-	SetConsoleCursorPosition(handle, coordinates); // SetConsoleCursorPosition Установить курсор на позицию
+	SetConsoleCursorPosition(handle, coordinates); // SetConsoleCursorPosition Установить курсор на поз7ицию
     // заголовка handle в координаты coordinates
 }
 Game::Game(int rows, int cols) //параметры в конструкторе
 {
-	board = new Matrix(20, 20); 
-	player = new Personage(-1, -1, board, 2); /*при помощи оператора new - создаём объекты, 
+	board = new Matrix(20, 20);
+	player = new Player(board); /*при помощи оператора new - создаём объекты,
     а при помощи оператора присваивания - инициализируем переменные (указатели) player и enemy*/
-	enemy = new Personage(-1, -1, board, 7);
+	enemy = new Enemy(board, player);
 }//коонструктор
 Game::~Game() //полность удаляем нашу ОП после того как поработаем с нашим массивом и он нам станет ненужен
 {
 	delete board;
 	delete player;
 	delete enemy;
-}
+ }
 
 void Game::FillArray(int k) //ф-я заполнения массива данными, &arr т.к.  ассив меняется и адрес тоже
 {
@@ -173,15 +175,19 @@ void Game::RandomEnemyMove()
 		{
 		case 1:
 			enemy->GoDown();
+			enemy->eatDown();
 			break;
 		case 2:
 			enemy->GoUp();
+			enemy->eatDown();
 			break;
 		case 3:
 			enemy->GoRight();
+			enemy->eatDown();
 			break;
 		case 4:
 			enemy->GoLeft();
+			enemy->eatDown();
 			break;
 		}
 		return;// чтобы выйти из ф-ии randomMove после совершения движения, return выходит из ф-ии в котор
