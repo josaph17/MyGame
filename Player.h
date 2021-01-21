@@ -1,5 +1,6 @@
 #include "Matrix.h" 
 #include "Personage.h" 
+#include <iostream>
 #pragma once
 
 class Player : public Personage
@@ -10,6 +11,7 @@ public:
 	void destroyUp();
 	void destroyRight();
 	void destroyLeft();
+	bool isAlive();
 };
 
 

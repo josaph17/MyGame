@@ -6,6 +6,14 @@
 Enemy::Enemy(Matrix* _board, Player* _player) : Personage(-1, -1, _board, 7)
 {
 	/*this->*/player = _player;
+
+	SetY(rand() % board->height());
+	SetX(rand() % board->width());
+
+	if (board->Get(GetY(), GetX()) == 0) ///
+	{
+		board->Set(GetY(), GetX(), 7);// враг ///
+	}
 }
 
 void Enemy::eatDown()
@@ -48,6 +56,34 @@ void Enemy::eatLeft()
 		player->SetX(-1);
 		player->SetY(-1);
 	}
+}
+void Enemy::Step()
+{
+	for (int p = 1; p > 0; )
+	{
+		int randomMove = 1 + rand() % 4;
+		switch (randomMove)
+		{
+		case 1:
+			GoDown();
+			eatDown();
+			break;
+		case 2:
+			GoUp();
+			eatDown();
+			break;
+		case 3:
+			GoRight();
+			eatDown();
+			break;
+		case 4:
+			GoLeft();
+			eatDown();
+			break;
+		}
+		return;// чтобы выйти из ф-ии randomMove после совершения движения, return выходит из ф-ии в котор
+	}
+	return;
 }
 
 

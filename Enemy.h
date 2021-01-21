@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "Matrix.h" 
 #include "Personage.h" 
 #include "Player.h" 
@@ -13,6 +15,7 @@ public:
 	void eatUp();
 	void eatRight();
 	void eatLeft();
+	void Step();
 private:
 	Player* player;
 };

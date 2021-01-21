@@ -16,7 +16,7 @@ class Game
 public:
 	Game(int rows, int cols);
 	~Game();
-	void FillArray(int k); //ля заполнения игрорвого поля
+	void FillBlocks(int k); //ля заполнения игрорвого поля
 	void ShowArray();
 	void PlayerDown();
 	void PlayerUp();
@@ -55,44 +55,16 @@ Game::~Game() //полность удаляем нашу ОП после тог�
 	delete enemy;
  }
 
-void Game::FillArray(int k) //ф-я заполнения массива данными, &arr т.к.  ассив меняется и адрес тоже
+void Game::FillBlocks(int k) //ф-я заполнения массива данными
 {
-	//srand((unsigned int)time(NULL));
-	for (int p = 0; p < k;)
+	for (int p = 0; p < k;)/*преграды*/
 	{
 		int randomRow = rand() % board->height();
 		int randomCol = rand() % board->width();
 
 		if (board->Get(randomRow, randomCol)== 0)
 		{
-			board->Set(randomRow, randomCol, 1); //преграда
-			p++;
-		}
-		else
-			continue;
-	}
-	for (int p = 0; p < 1;)    //для рандомной 2//////////////////////////////////////
-	{
-		player->SetY(rand() % board->height()); //для i
-		player->SetX(rand() % board->width()); // было player_j = rand() % board->width()
-
-		if (board->Get(player->GetY(), player->GetX()) == 0) ///
-		{
-			board->Set(player->GetY(), player->GetX(), 2);// игрок ///
-			p++;
-		}
-		else
-			continue;  
-	}
-	for (int p = 0; p < 1;)    //для врагов
-	{
-		enemy->SetY(rand() % board->height());
-		enemy->SetX(rand() % board->width());
-
-		
-		if (board->Get(enemy->GetY(), enemy->GetX()) == 0) ///
-		{
-			board->Set(enemy->GetY(), enemy->GetX(), 7);// враг ///
+			board->Set(randomRow, randomCol, 1); 
 			p++;
 		}
 		else
@@ -167,37 +139,12 @@ void Game::PlayerLeft()
 }
 void Game::RandomEnemyMove()
 {
-	for (int p=1; p>0; )
-	{
-		//srand((unsigned int)time(NULL)); надо вызывать 1 раз, а то вызывают одинаковые числа, здесь ф-я не успевает выдать другое числа.
-		int randomMove = 1 + rand() % 4;
-		switch (randomMove)
-		{
-		case 1:
-			enemy->GoDown();
-			enemy->eatDown();
-			break;
-		case 2:
-			enemy->GoUp();
-			enemy->eatDown();
-			break;
-		case 3:
-			enemy->GoRight();
-			enemy->eatDown();
-			break;
-		case 4:
-			enemy->GoLeft();
-			enemy->eatDown();
-			break;
-		}
-		return;// чтобы выйти из ф-ии randomMove после совершения движения, return выходит из ф-ии в котор
-	}
-	return;
+	enemy->Step();
 }
 bool Game::isGameOver()
 {
-	return (player->GetY() == -1) && (player->GetX() == -1);
-	//player_j == -1 //если они равны -1, то это выражени будет true
+	return player->isAlive();
+	
 }
 
 
@@ -214,7 +161,7 @@ int main()
 	
 	bool escape_pressed = false; //для выхода их программы
 	//arr = CreateArray(rows, cols);
-	game->FillArray(1); //параметр k - преграда
+	game->FillBlocks(1); //параметр k - преграда
 	game->ShowArray();
 	for (int i = 1; (!escape_pressed) && (!game->isGameOver()); i++)
 	{
@@ -274,7 +221,7 @@ const чтобы ф-я гарантированна пробежала по вс
 & - ТУТ НЕ НУЖЕН, ПЕРЕДАЧА ПО ССЫЛКЕ НЕ ОБЯЗАТЕЛЬНА
 const - ТОЖЕ НЕ НУЖЕН, В НЁМ ВООБЩЕ СМЫСЛЕ НЕТ, ТАК КАК ТЕБЕ НУЖНО ПОМЕНЯТЬ ЗНАЧЕНИЯ
 int &k - ЗАЧЕМ ПО ССЫЛКЕ ПЕРЕДАВАТЬ? ТЫ ЖЕ НЕ СОБИРАЕШЬСЯ МЕНЯТЬ ЗНАЧЕНИЕ k
-void FillArray(int** arr, const int rows, const int cols, int k) - ТАКАЯ СИГНАТУРА НОРМАЛЬНАЯ
+void FillBlocks(int** arr, const int rows, const int cols, int k) - ТАКАЯ СИГНАТУРА НОРМАЛЬНАЯ
 						  -- комментарии от Виктора -- */
 						  /*const чтобы ф-я гарантированна пробежала по всем эл-ам  массива, в ф-ии мы не сможем никак поменять константные значения
 						  если бы перед arr поставил значения, то я б не смог присвоить никакие зн-я массиву arr*/
