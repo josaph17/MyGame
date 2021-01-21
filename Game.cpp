@@ -41,9 +41,9 @@ void set_cursor(int x = 0, int y = 0)
 	SetConsoleCursorPosition(handle, coordinates); // SetConsoleCursorPosition Установить курсор на поз7ицию
     // заголовка handle в координаты coordinates
 }
-Game::Game(int rows, int cols) //параметры в конструкторе
+Game::Game(int _rows, int _cols) //параметры в конструкторе
 {
-	board = new Matrix(20, 20);
+	board = new Matrix(_rows, _cols);
 	player = new Player(board); /*при помощи оператора new - создаём объекты,
     а при помощи оператора присваивания - инициализируем переменные (указатели) player и enemy*/
 	enemy = new Enemy(board, player);
@@ -207,7 +207,7 @@ int main()
 	srand((unsigned int)time(NULL)); // только здесь 1 раз , последовательность меняется
 	setlocale(LC_ALL, "");
 	//int rows = 20, cols = 30, k = 10, pattern = 2;
-	Game* game = new Game(10, 10); //было (20, 30)
+	Game* game = new Game(20, 20); //было (20, 30)
 	int** arr = NULL; //чтобы создать двумерный динамический массив, создаем указатель на массив указателей
 	//cout << "Введите количество строк и столбцов и число единиц (не равное размеру матрицы - 2): " << endl;
 	//cin >> rows >> cols >> k; 

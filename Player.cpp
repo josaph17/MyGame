@@ -2,9 +2,9 @@
 #include "Matrix.h" 
 #include "Player.h" 
 
-Player::Player(Matrix* board) : Personage(-1, -1, board, 2)
+Player::Player(Matrix* _board) : Personage(-1, -1, _board, 2)
 { 
-
+	
 }
 
 void Player::destroyDown()

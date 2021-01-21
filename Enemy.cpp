@@ -3,8 +3,9 @@
 #include "Player.h"
 #include "Enemy.h"
 
-Enemy::Enemy(Matrix* board, Player* player) : Personage(-1, -1, board, 7)
+Enemy::Enemy(Matrix* _board, Player* _player) : Personage(-1, -1, _board, 7)
 {
+	/*this->*/player = _player;
 }
 
 void Enemy::eatDown()

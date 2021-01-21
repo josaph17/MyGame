@@ -7,7 +7,7 @@
 class Enemy: public Personage
 {
 public:
-	Enemy(Matrix* board, Player* player);/*board не нужно иначе это будет другой board,
+	Enemy(Matrix* /*_board*/, Player* /*_player*/);/*board не нужно иначе это будет другой board,
 	не важно, где он будет, в private или public*/
 	void eatDown();
 	void eatUp();

@@ -4,7 +4,7 @@
 class Personage 
 { //тело класса
 public:
-	Personage(int coordinate_x, int coordinate_y, Matrix* board, int personage_value);
+	Personage(int _coordinate_x, int _coordinate_y, Matrix* _board, int _personage_value);
 	~Personage();
 	void GoDown();  
 	void GoUp();

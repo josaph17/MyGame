@@ -1,12 +1,12 @@
 #include "Personage.h"
 #include "Matrix.h" 
 
-Personage::Personage(int coordinate_x, int coordinate_y, Matrix* board, int personage_value) //параметры в конструкторе
+Personage::Personage(int _coordinate_x, int _coordinate_y, Matrix* _board, int _personage_value) //параметры в конструкторе
 {
-	this->board = board;
-	this->coordinate_x = coordinate_x;
-	this->coordinate_y = coordinate_y;
-	this->personage_value = personage_value;
+	board = _board;
+	coordinate_x = _coordinate_x;
+	coordinate_y = _coordinate_y;
+	personage_value = _personage_value;
 	//coordinate_x = -1; //Ты присваиваешь -1 тем переменным (параметрам), которые сейчас удалятся.
 	//coordinate_y = -1; //смысла в этом нет/
 }
