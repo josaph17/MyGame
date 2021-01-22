@@ -41,6 +41,10 @@ int Matrix::width()//столбцы т.е. ширина
 {
 	return cols;
 }
+bool Matrix::isExistAndEmpty(int i, int j)
+{
+	return ((((i >= 0) && (i < height())) && ((j >= 0) && (j < width()))) && (arr[i][j] == 0));
+}
 
 
 

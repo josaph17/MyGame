@@ -17,7 +17,8 @@ Personage::~Personage()
 
 void Personage::GoDown()
 {
-	if ((coordinate_y < board->height() - 1) && (board->Get(coordinate_y + 1, coordinate_x) == 0))
+	//if ((coordinate_y < board->height() - 1) && (board->Get(coordinate_y + 1, coordinate_x) == 0))
+	if (board->isExistAndEmpty(coordinate_y + 1, coordinate_x))
 	{
 		board->Set(coordinate_y, coordinate_x, 0); ///
 		board->Set(coordinate_y+1, coordinate_x, personage_value); /// была 2 вместо personage_value
@@ -26,7 +27,8 @@ void Personage::GoDown()
 }
 void Personage::GoUp()
 {
-	if ((coordinate_y > 0) && (board->Get(coordinate_y - 1, coordinate_x) == 0))
+	//if ((coordinate_y > 0) && (board->Get(coordinate_y - 1, coordinate_x) == 0))
+	if (board->isExistAndEmpty(coordinate_y - 1, coordinate_x))
 	{
 		board->Set(coordinate_y, coordinate_x, 0); ///
 		board->Set(coordinate_y - 1, coordinate_x, personage_value); ///
@@ -35,7 +37,8 @@ void Personage::GoUp()
 }
 void Personage::GoRight()
 {
-	if ((coordinate_x < board->width()) && ((board->Get(coordinate_y, coordinate_x + 1) == 0)))
+	//if ((coordinate_x < board->width()) && ((board->Get(coordinate_y, coordinate_x + 1) == 0)))
+	if (board->isExistAndEmpty(coordinate_y, coordinate_x + 1))
 	{
 		board->Set(coordinate_y, coordinate_x, 0); ///
 		board->Set(coordinate_y, coordinate_x+1, personage_value); ///
@@ -44,7 +47,8 @@ void Personage::GoRight()
 }
 void Personage::GoLeft()
 {
-	if ((coordinate_x > 0) && ((board->Get(coordinate_y, coordinate_x - 1) == 0)))
+	//if ((coordinate_x > 0) && ((board->Get(coordinate_y, coordinate_x - 1) == 0)))
+	if (board->isExistAndEmpty(coordinate_y, coordinate_x - 1))
 	{
 		board->Set(coordinate_y, coordinate_x, 0); ///
 		board->Set(coordinate_y, coordinate_x - 1, personage_value); ///
@@ -75,6 +79,7 @@ void Personage::SetValue(int valueNew)
 {
 	personage_value = valueNew;
 }
+
 
 
 

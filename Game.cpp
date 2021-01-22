@@ -14,7 +14,7 @@ using namespace std;
 class Game
 {
 public:
-	Game(int rows, int cols);
+	Game(int _rows, int _cols);
 	~Game();
 	void FillBlocks(int k); //ля заполнения игрорвого поля
 	void ShowArray();
@@ -97,6 +97,7 @@ void Game::ShowArray() //вывод массива
 				SetConsoleTextAttribute(console, FOREGROUND_GREEN | FOREGROUND_INTENSITY); //зеленые
 				cout << "[]";
 			}
+			if (board->Get(i, j) == 2) ///
 			if (board->Get(i, j) == 2) ///
 			{
 				SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_INTENSITY); //белый
