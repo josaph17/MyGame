@@ -45,12 +45,12 @@ void Player::destroyLeft()
 		board->Set(GetY(), GetX() - 1, 7); ///
 	}
 }
-bool Player::isAlive()
-{
-	return (GetY() == -1) && (GetX() == -1);
-	//return player->isDead();
-	//player_j == -1 //если они равны -1, то это выражени будет true
-}
+//bool Player::isAlive()
+//{
+//	return (GetY() == -1) && (GetX() == -1);
+//	//return player->isDead();
+//	//player_j == -1 //если они равны -1, то это выражени будет true
+//}
 
 
 

@@ -14,12 +14,15 @@ public:
 	int GetY();
 	void SetX(int valueX);
 	void SetY(int valueY);
-	int GetValue();
-	void SetValue(int valueNew);
+	int GetValue() const; //ф-я константная и она не меняет
+	bool isAlive() const;
+	void Die();
 protected:
 	Matrix* board;
 	int coordinate_x, coordinate_y;
+private:
 	int personage_value;
+	bool alive;
 };
 
 

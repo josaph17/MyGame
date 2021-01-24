@@ -25,10 +25,12 @@ public:
 	//у тебя в main-е нигде же не вызывается перемещение вра следовательно, эти функции не нужны
 	void RandomEnemyMove();
 	bool isGameOver();
+	void KillEnemy();
  private:
 	Matrix* board;
 	Player* player;
 	Enemy* enemy;
+
 };
 
 void set_cursor(int x = 0, int y = 0)
@@ -70,6 +72,7 @@ void Game::FillBlocks(int k) //ф-я заполнения массива дан�
 		else
 			continue;
 	}
+	ShowArray();
 }
 void Game::ShowArray() //вывод массива
 {
@@ -125,52 +128,59 @@ void Game::ShowArray() //вывод массива
 void Game::PlayerDown()
 {
 	player->GoDown();
+	ShowArray();
 }
 void Game::PlayerUp()
 {
 	player->GoUp();
+	ShowArray();
 }
 void Game::PlayerRight()
 {
 	player->GoRight();
+	ShowArray();
 }
 void Game::PlayerLeft()
 {
 	player->GoLeft();
+	ShowArray();
 }
 void Game::RandomEnemyMove()
 {
 	enemy->Step();
+	ShowArray();
 }
 bool Game::isGameOver()
 {
-	return player->isAlive();
+	return !player->isAlive(); //not Alive , т.к. Alive=true
 	
+}
+void Game::KillEnemy()
+{
+	enemy->Die();
+	ShowArray();
 }
 
 
 
-int main()
+void main()
 {
 	srand((unsigned int)time(NULL)); // только здесь 1 раз , последовательность меняется
 	setlocale(LC_ALL, "");
 	//int rows = 20, cols = 30, k = 10, pattern = 2;
-	Game* game = new Game(20, 20); //было (20, 30)
+	Game* game = new Game(3, 3); //было (20, 30)
 	int** arr = NULL; //чтобы создать двумерный динамический массив, создаем указатель на массив указателей
 	//cout << "Введите количество строк и столбцов и число единиц (не равное размеру матрицы - 2): " << endl;
 	//cin >> rows >> cols >> k; 
-	
 	bool escape_pressed = false; //для выхода их программы
 	//arr = CreateArray(rows, cols);
-	game->FillBlocks(1); //параметр k - преграда
-	game->ShowArray();
+	game->FillBlocks(2); //параметр k - преграда
 	for (int i = 1; (!escape_pressed) && (!game->isGameOver()); i++)
 	{
 		Sleep(70);
 		if (i % 5 == 0) //каждое 5-ое i выводить случайное движение врага, 5:5 = 0, без остатка
 		{
 			game->RandomEnemyMove();
-			game->ShowArray();
 		}
 		if (_kbhit())
 		{
@@ -181,21 +191,18 @@ int main()
 				break;
 			case 72:
 				game->PlayerUp();
-				game->ShowArray();
 				break;
 			case 80:
 				game->PlayerDown();
-				game->ShowArray();
 				break;
-
 			case 75:
 				game->PlayerLeft();
-				game->ShowArray();
 				break;
-
 			case 77:
 				game->PlayerRight();
-				game->ShowArray();
+				break;
+			case '1':
+				game->KillEnemy();
 				break;
 			}
 		}
@@ -204,7 +211,6 @@ int main()
 	HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE); //для получения дискрипптора
 	SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY); //белый
 	cout << "Game over." << endl;
-	return 0;
 }
 
 

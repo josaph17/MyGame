@@ -11,7 +11,6 @@ public:
 	void destroyUp();
 	void destroyRight();
 	void destroyLeft();
-	bool isAlive();
 };
 
 

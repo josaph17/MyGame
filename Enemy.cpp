@@ -10,21 +10,22 @@ Enemy::Enemy(Matrix* _board, Player* _player) : Personage(-1, -1, _board, 7)
 	SetY(rand() % board->height());
 	SetX(rand() % board->width());
 
-	if (board->Get(GetY(), GetX()) == 0) ///
+	if ((board->Get(GetY(), GetX()) == 0) && (board->Get(GetY(), GetX()) != 2)) ///
 	{
 		board->Set(GetY(), GetX(), 7);// враг ///
 	}
+
 }
 
 void Enemy::eatDown()
 {
-	if (board->Get(GetY() + 1, GetX()) == 2)
+	//if (board->Get(GetY() + 1, GetX()) == 2)
+	if ((isAlive() && player->isAlive()) && GetY()+1 == player->GetY() && GetX() == player->GetX()) //если враг может съесть игрока внизу
 	{
 		board->Set(GetY(), GetX(), 0); ///
 		board->Set(GetY() + 1, GetX(), GetValue()); /// GetValue() т.к. у врага зукыщтфпу мфдгу = 7
-	//прописать уничтожение игрока
-		player->SetX(-1);
-		player->SetY(-1);
+		SetY(GetY()+1);
+		player->Die();
 	}
 }
 void Enemy::eatUp()
@@ -33,8 +34,7 @@ void Enemy::eatUp()
 	{
 		board->Set(GetY(), GetX(), 0); ///
 		board->Set(GetY() - 1, GetX(), GetValue()); ///
-		player->SetX(-1);
-		player->SetY(-1);
+		player->Die();
 	}
 }
 void Enemy::eatRight()
@@ -43,8 +43,7 @@ void Enemy::eatRight()
 	{
 		board->Set(GetY(), GetX(), 0); ///
 		board->Set(GetY(), GetX() + 1, GetValue()); ///
-		player->SetX(-1);
-		player->SetY(-1);
+		player->Die();
 	}
 }
 void Enemy::eatLeft()
@@ -53,8 +52,7 @@ void Enemy::eatLeft()
 	{
 		board->Set(GetY(), GetX(), 0); ///
 		board->Set(GetY(), GetX() - 1, GetValue()); ///
-		player->SetX(-1);
-		player->SetY(-1);
+		player->Die();
 	}
 }
 void Enemy::Step()
@@ -65,8 +63,8 @@ void Enemy::Step()
 		switch (randomMove)
 		{
 		case 1:
-			GoDown();
 			eatDown();
+			GoDown();
 			break;
 		case 2:
 			GoUp();

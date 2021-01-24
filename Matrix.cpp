@@ -27,11 +27,15 @@ Matrix::~Matrix() //полность удаляем нашу ОП после т�
 
 int Matrix::Get(int i, int j)
 {
-	return arr[i][j];
+	if ((i >= 0) && (i < height()) && (j >= 0) && (j < width()))
+		return arr[i][j];
+	else
+		return 0; //можно написать 8 вместо нуля
 }
 void Matrix::Set(int i, int j, int value)
 {
-	arr[i][j] = value;
+	if ((i >= 0) && (i < height()) && (j >= 0) && (j < width()))
+		arr[i][j] = value;
 }
 int Matrix::height()
 {
