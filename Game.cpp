@@ -101,7 +101,6 @@ void Game::ShowArray() //вывод массива
 				cout << "[]";
 			}
 			if (board->Get(i, j) == 2) ///
-			if (board->Get(i, j) == 2) ///
 			{
 				SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_INTENSITY); //белый
 				cout << "()";
@@ -157,7 +156,7 @@ bool Game::isGameOver()
 }
 void Game::KillEnemy()
 {
-	enemy->Die();
+	//enemy->Die();
 	ShowArray();
 }
 
