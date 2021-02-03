@@ -167,14 +167,14 @@ void main()
 	srand((unsigned int)time(NULL)); // только здесь 1 раз , последовательность меняется
 	setlocale(LC_ALL, "");
 	//int rows = 20, cols = 30, k = 10, pattern = 2;
-	Game* game = new Game(2, 2); //было (20, 30)
+	Game* game = new Game(3, 3); //было (20, 30)
 	int** arr = NULL; //чтобы создать двумерный динамический массив, создаем указатель на массив указателей
 	//cout << "Введите количество строк и столбцов и число единиц (не равное размеру матрицы - 2): " << endl;
 	//cin >> rows >> cols >> k; 
 	bool escape_pressed = false; //для выхода их программы
 	//arr = CreateArray(rows, cols);
 	game->FillBlocks(2); //параметр k - преграда
-	for (int i = 1; (!escape_pressed) && (!game->isGameOver()); i++)
+	for (int i = 1; (!escape_pressed) /*&& (!game->isGameOver())*/; i++)
 	{
 		Sleep(70);
 		if (i % 5 == 0) //каждое 5-ое i выводить случайное движение врага, 5:5 = 0, без остатка

@@ -6,15 +6,17 @@
 Enemy::Enemy(Matrix* _board, Player* _player) : Personage(-1, -1, _board, 7)
 {
 	/*this->*/player = _player;
-	//if ((SetY(rand() % board->height()) != player->SetY(rand() % board->height())) && (SetX(rand() % board->width()) != player->SetX(rand() % board->width())))
-	//{
-	//	board->Set(GetY(), GetX(), 7);//
-	//}
-	SetY(rand() % board->height());
-	SetX(rand() % board->width());
-	if ((board->Get(GetY(), GetX()) == 0) && (board->Get(GetY(), GetX()) != 2)) ///
+	while (true)
 	{
-		board->Set(GetY(), GetX(), 7);// враг ///
+		int y = rand() % board->height();
+		int x = rand() % board->width();
+		if (board->isExistAndEmpty(y, x))
+		{
+			SetY(y);
+			SetX(x);
+			board->Set(y, x, 7);
+			break;
+		}
 	}
 }
 
@@ -23,48 +25,32 @@ void Enemy::eatDown()
 	if ((isAlive() && player->isAlive()) && GetY() + 1 == player->GetY() && GetX() == player->GetX()) //если враг может съесть игрока внизу
 	{
 		player->Die();
-		board->Set(GetY(), GetX(), 0); ///
-		board->Set(GetY() + 1, GetX(), GetValue()); /// GetValue() т.к. у врага зукыщтфпу мфдгу = 7
-		SetY(GetY() + 1);
 	}
-	else
-		GoDown();
+	GoDown();
 }
 void Enemy::eatUp()
 {
 	if ((isAlive() && player->isAlive()) && GetY() - 1 == player->GetY() && GetX() == player->GetX()) //если враг может съесть игрока внизу
 	{
 		player->Die();
-		board->Set(GetY(), GetX(), 0); ///
-		board->Set(GetY() - 1, GetX(), GetValue()); ///
-		SetY(GetY() - 1);
 	}
-	else
-		GoUp();
+	GoUp();
 }
 void Enemy::eatRight()
 {
 	if ((isAlive() && player->isAlive()) && GetX() + 1 == player->GetX() && GetY() == player->GetY()) //если враг может съесть игрока внизу
 	{
 		player->Die();
-		board->Set(GetY(), GetX(), 0); ///
-		board->Set(GetY(), GetX() + 1, GetValue()); ///
-		SetX(GetX() + 1);
 	}
-	else
-		GoRight();
+	GoRight();
 }
 void Enemy::eatLeft()
 {
 	if ((isAlive() && player->isAlive()) && GetX() - 1 == player->GetX() && GetY() == player->GetY()) //если враг может съесть игрока внизу
 	{
 		player->Die();
-		board->Set(GetY(), GetX(), 0); ///
-		board->Set(GetY(), GetX() - 1, GetValue() ); ///
-		SetX(GetX() - 1);
 	}
-	else
-		GoLeft();
+	GoLeft();
 }
 void Enemy::Step()
 {
