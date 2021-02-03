@@ -100,7 +100,7 @@ void Game::ShowArray() //вывод массива
 				SetConsoleTextAttribute(console, FOREGROUND_GREEN | FOREGROUND_INTENSITY); //зеленые
 				cout << "[]";
 			}
-			if (board->Get(i, j) == 2) ///
+			if (board->Get(i, j) == 2) /// 
 			{
 				SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_INTENSITY); //белый
 				cout << "()";
@@ -167,7 +167,7 @@ void main()
 	srand((unsigned int)time(NULL)); // только здесь 1 раз , последовательность меняется
 	setlocale(LC_ALL, "");
 	//int rows = 20, cols = 30, k = 10, pattern = 2;
-	Game* game = new Game(3, 3); //было (20, 30)
+	Game* game = new Game(2, 2); //было (20, 30)
 	int** arr = NULL; //чтобы создать двумерный динамический массив, создаем указатель на массив указателей
 	//cout << "Введите количество строк и столбцов и число единиц (не равное размеру матрицы - 2): " << endl;
 	//cin >> rows >> cols >> k; 
