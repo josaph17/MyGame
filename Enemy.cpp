@@ -20,61 +20,56 @@ Enemy::Enemy(Matrix* _board, Player* _player) : Personage(-1, -1, _board, 7)
 	}
 }
 
-void Enemy::eatDown()
+void Enemy::GoDown()
 {
 	if ((isAlive() && player->isAlive()) && GetY() + 1 == player->GetY() && GetX() == player->GetX()) //если враг может съесть игрока внизу
 	{
 		player->Die();
 	}
-	GoDown();
+	Personage::GoDown();
 }
-void Enemy::eatUp()
+void Enemy::GoUp()
 {
 	if ((isAlive() && player->isAlive()) && GetY() - 1 == player->GetY() && GetX() == player->GetX()) //если враг может съесть игрока внизу
 	{
 		player->Die();
 	}
-	GoUp();
+	Personage::GoUp();
 }
-void Enemy::eatRight()
+void Enemy::GoRight()
 {
 	if ((isAlive() && player->isAlive()) && GetX() + 1 == player->GetX() && GetY() == player->GetY()) //если враг может съесть игрока внизу
 	{
 		player->Die();
 	}
-	GoRight();
+	Personage::GoRight();
 }
-void Enemy::eatLeft()
+void Enemy::GoLeft()
 {
 	if ((isAlive() && player->isAlive()) && GetX() - 1 == player->GetX() && GetY() == player->GetY()) //если враг может съесть игрока внизу
 	{
 		player->Die();
 	}
-	GoLeft();
+	Personage::GoLeft();
 }
 void Enemy::Step()
 {
-	for (int p = 1; p > 0; )
+	int randomMove = 1 + rand() % 4;
+	switch (randomMove)
 	{
-		int randomMove = 1 + rand() % 4;
-		switch (randomMove)
-		{
-		case 1:
-			eatDown();
-			break;
-		case 2:
-			eatUp();
-			break;
-		case 3:
-			eatRight();
-			break;
-		case 4:
-			eatLeft();
-			break;
-		}
-		return;// чтобы выйти из ф-ии randomMove после совершения движения, return выходит из ф-ии в котор
-	}
-	return;
+	case 1:
+		GoDown();
+		break;
+	case 2:
+		GoUp();
+		break;
+	case 3:
+		GoRight();
+		break;
+	case 4:
+		GoLeft();
+		break;
+	}	
 }
 
 
