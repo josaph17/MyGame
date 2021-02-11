@@ -85,18 +85,3 @@ void Personage::Die()
 	alive = false;
 	board->Set(coordinate_y, coordinate_x, 0);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

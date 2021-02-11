@@ -24,17 +24,3 @@ private:
 	int personage_value;
 	bool alive;
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-

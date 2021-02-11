@@ -6,11 +6,11 @@
 Enemy::Enemy(Matrix* _board, Player* _player) : Personage(-1, -1, _board, 7)
 {
 	/*this->*/player = _player;
-	while (true)
+	while (true) /*бесконечный цикл*/
 	{
-		int y = rand() % board->height();
+		int y = rand() % board->height(); /*назначаем рандомные координаты*/
 		int x = rand() % board->width();
-		if (board->isExistAndEmpty(y, x))
+		if (board->isExistAndEmpty(y, x)) /*если клетка по этим координатам есть и пуста, то присваиваем значения*/
 		{
 			SetY(y);
 			SetX(x);
@@ -54,6 +54,7 @@ void Enemy::GoLeft()
 }
 void Enemy::Step()
 {
+	/*не делали while(true) т.к. ф-я выполняется 1 раз, т.е. линейный алгоритм - 1 проход*/
 	int randomMove = 1 + rand() % 4;
 	switch (randomMove)
 	{
@@ -71,11 +72,3 @@ void Enemy::Step()
 		break;
 	}	
 }
-
-
-
-
-
-
-
-

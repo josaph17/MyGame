@@ -45,13 +45,3 @@ void Player::destroyLeft()
 		board->Set(GetY(), GetX() - 1, 7); ///
 	}
 }
-
-
-
-
-
-
-
-
-
-

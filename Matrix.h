@@ -14,11 +14,3 @@ private:
 	int** arr;//данные
 	int rows, cols;//размеры
 };
-
-
-
-
-
-
-
-

@@ -19,17 +19,3 @@ public:
 private:
 	Player* player;
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-

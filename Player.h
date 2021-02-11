@@ -12,17 +12,3 @@ public:
 	void destroyRight();
 	void destroyLeft();
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
