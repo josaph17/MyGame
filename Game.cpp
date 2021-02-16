@@ -23,13 +23,12 @@ public:
 	void PlayerRight();
 	void PlayerLeft();
 	//у тебя в main-е нигде же не вызывается перемещение вра следовательно, эти функции не нужны
-	void RandomEnemyMove();
+	void randomEnemyArrMove();
 	bool isGameOver();
 	void KillEnemy();
  private:
 	Matrix* board;
 	Player* player;
-	Enemy* enemy;
 	Enemy** enemy_arr;
 	int enemyCount;
 };
@@ -51,10 +50,12 @@ Game::Game(int _rows, int _cols) //параметры в конструктор�
 	player = new Player(board); /*при помощи оператора new - создаём объекты,
 	а при помощи оператора присваивания - инициализируем переменные (указатели) player и enemy*/
 	enemyCount = 10;
-	Enemy** enemy_arr = new Enemy*[enemyCount]; 	/*Динамическое создание массива. Каждый эл-т массива - указатель на динамический объект*/
+	enemy_arr = new Enemy*[enemyCount]; 	//enemy /*Динамическое создание массива. Каждый эл-т массива - указатель на динамический объект*/
+	/*Есть класс Enemy. Enemy* - это тип "указатель на объект класса Enemy".
+	Enemy** - это тип "указатель на указатель на объект класса Enemy" (или "указатель на массив указателей на класс Enemy").*/
 	for(int count = 0; count < enemyCount; count++)
 	{
-		enemy_arr[0] = new Enemy(board, player);
+		enemy_arr[count] = new Enemy(board, player);
 	}
 }
 
@@ -156,9 +157,12 @@ void Game::PlayerLeft()
 	player->GoLeft();
 	ShowArray();
 }
-void Game::RandomEnemyMove()
+void Game::randomEnemyArrMove()
 {
-	enemy->Step();
+	for (int count = 0; count < enemyCount; count++)
+	{
+		enemy_arr[count]->Step();
+	}
 	ShowArray();
 }
 bool Game::isGameOver()
@@ -188,7 +192,7 @@ void main()
 		Sleep(70);
 		if (i % 5 == 0) //каждое 5-ое i выводить случайное движение врага, 5:5 = 0, без остатка
 		{
-			game->RandomEnemyMove();
+			game->randomEnemyArrMove();
 		}
 		if (_kbhit())
 		{
