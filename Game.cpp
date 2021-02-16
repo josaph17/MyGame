@@ -65,7 +65,7 @@ Game::~Game() //полность удаляем нашу ОП после тог�
 	delete player;
 	for (int count = 0; count < enemyCount; count++)
 	{
-		delete enemy_arr[0];
+		delete enemy_arr[count];
 	}
 	delete []enemy_arr;
  }
