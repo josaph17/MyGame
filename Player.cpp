@@ -20,6 +20,7 @@ void Player::destroyDown()
 		board->Set(GetY(), GetX(), 0); ///
 		board->Set(GetY() + 1, GetX(), 7); /// GetValue() т.к. у врага зукыщтфпу мфдгу = 7
 	}
+	Die();
 }
 void Player::destroyUp()
 {
@@ -28,6 +29,7 @@ void Player::destroyUp()
 		board->Set(GetY(), GetX(), 0); ///
 		board->Set(GetY() - 1, GetX(), 7); ///
 	}
+	Die();
 }
 void Player::destroyRight()
 {
@@ -36,6 +38,7 @@ void Player::destroyRight()
 		board->Set(GetY(), GetX(), 0); ///
 		board->Set(GetY(), GetX() + 1, 7); ///
 	}
+	Die();
 }
 void Player::destroyLeft()
 {
@@ -44,4 +47,5 @@ void Player::destroyLeft()
 		board->Set(GetY(), GetX(), 0); ///
 		board->Set(GetY(), GetX() - 1, 7); ///
 	}
+	Die();
 }

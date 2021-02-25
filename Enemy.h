@@ -15,7 +15,7 @@ public:
 	void GoUp();
 	void GoRight();
 	void GoLeft();
-	void Step();
-private:
+	virtual void Step();
+protected:
 	Player* player;
 };

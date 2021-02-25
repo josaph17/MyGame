@@ -18,7 +18,6 @@ Personage::~Personage()
 
 void Personage::GoDown()
 {
-	//if ((coordinate_y < board->height() - 1) && (board->Get(coordinate_y + 1, coordinate_x) == 0))
 	if (isAlive() && board->isExistAndEmpty(coordinate_y + 1, coordinate_x))
 	{
 		board->Set(coordinate_y, coordinate_x, 0); ///
@@ -28,7 +27,6 @@ void Personage::GoDown()
 }
 void Personage::GoUp()
 {
-	//if ((coordinate_y > 0) && (board->Get(coordinate_y - 1, coordinate_x) == 0))
 	if (isAlive() && board->isExistAndEmpty(coordinate_y - 1, coordinate_x))
 	{
 		board->Set(coordinate_y, coordinate_x, 0); ///
@@ -38,7 +36,6 @@ void Personage::GoUp()
 }
 void Personage::GoRight()
 {
-	//if ((coordinate_x < board->width()) && ((board->Get(coordinate_y, coordinate_x + 1) == 0)))
 	if (isAlive() && board->isExistAndEmpty(coordinate_y, coordinate_x + 1))
 	{
 		board->Set(coordinate_y, coordinate_x, 0); ///

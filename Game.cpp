@@ -8,6 +8,7 @@
 #include "Personage.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "SmartEnemy.h"
 
 using namespace std;
 
@@ -31,6 +32,7 @@ public:
 	Player* player;
 	Enemy** enemy_arr;
 	int enemyCount;
+	SmartEnemy* smartenemy;
 };
 
 void set_cursor(int x = 0, int y = 0)
@@ -52,20 +54,21 @@ Game::Game(int _rows, int _cols) //параметры в конструктор�
 	enemyCount = 10;
 	enemy_arr = new Enemy*[enemyCount]; 	//enemy /*Динамическое создание массива. Каждый эл-т массива - указатель на динамический объект*/
 	/*Есть класс Enemy. Enemy* - это тип "указатель на объект класса Enemy".
-	Enemy** - это тип "указатель на указатель на объект класса Enemy" (или "указатель на массив указателей на класс Enemy").*/
-	for(int count = 0; count < enemyCount; count++)
+	Enemy** - это "указатель на указатель на объект класса Enemy" (или "указатель на массив указателей на класс Enemy").*/
+	for(int i = 0; i < enemyCount; i++)
 	{
-		enemy_arr[count] = new Enemy(board, player);
+		enemy_arr[i] = new Enemy(board, player);
 	}
+	smartenemy = new SmartEnemy(board, player);
 }
 
 Game::~Game() //полность удаляем нашу ОП после того как поработаем с нашим массивом и он нам станет ненужен
 {
 	delete board;
 	delete player;
-	for (int count = 0; count < enemyCount; count++)
+	for (int i = 0; i < enemyCount; i++)
 	{
-		delete enemy_arr[count];
+		delete enemy_arr[i];
 	}
 	delete []enemy_arr;
  }
@@ -159,9 +162,9 @@ void Game::PlayerLeft()
 }
 void Game::randomEnemyArrMove()
 {
-	for (int count = 0; count < enemyCount; count++)
+	for (int i = 0; i < enemyCount; i++)
 	{
-		enemy_arr[count]->Step();
+		enemy_arr[i]->Step();
 	}
 	ShowArray();
 }
@@ -186,7 +189,7 @@ void main()
 	//cin >> rows >> cols >> k; 
 	bool escape_pressed = false; //для выхода их программы
 	//arr = CreateArray(rows, cols);
-	game->FillBlocks(2); //параметр k - преграда
+	game->FillBlocks(100); //параметр k - преграда
 	for (int i = 1; (!escape_pressed) /*&& (!game->isGameOver())*/; i++)
 	{
 		Sleep(70);
