@@ -30,7 +30,7 @@ public:
  private:
 	Matrix* board;
 	Player* player;
-	Enemy** enemy_arr;
+	/*Enemy** enemy_arr;*/
 	int enemyCount;
 	SmartEnemy* smartenemy;
 };
@@ -52,13 +52,13 @@ Game::Game(int _rows, int _cols) //параметры в конструктор�
 	player = new Player(board); /*при помощи оператора new - создаём объекты,
 	а при помощи оператора присваивания - инициализируем переменные (указатели) player и enemy*/
 	enemyCount = 10;
-	enemy_arr = new Enemy*[enemyCount]; 	//enemy /*Динамическое создание массива. Каждый эл-т массива - указатель на динамический объект*/
-	/*Есть класс Enemy. Enemy* - это тип "указатель на объект класса Enemy".
-	Enemy** - это "указатель на указатель на объект класса Enemy" (или "указатель на массив указателей на класс Enemy").*/
-	for(int i = 0; i < enemyCount; i++)
-	{
-		enemy_arr[i] = new Enemy(board, player);
-	}
+	//enemy_arr = new Enemy*[enemyCount]; 	//enemy /*Динамическое создание массива. Каждый эл-т массива - указатель на динамический объект*/
+	///*Есть класс Enemy. Enemy* - это тип "указатель на объект класса Enemy".
+	//Enemy** - это "указатель на указатель на объект класса Enemy" (или "указатель на массив указателей на класс Enemy").*/
+	//for(int i = 0; i < enemyCount; i++)
+	//{
+	//	enemy_arr[i] = new Enemy(board, player);
+	//}
 	smartenemy = new SmartEnemy(board, player);
 }
 
@@ -66,11 +66,12 @@ Game::~Game() //полность удаляем нашу ОП после тог�
 {
 	delete board;
 	delete player;
-	for (int i = 0; i < enemyCount; i++)
-	{
-		delete enemy_arr[i];
-	}
-	delete []enemy_arr;
+	//for (int i = 0; i < enemyCount; i++)
+	//{
+	//	delete enemy_arr[i];
+	//}
+	/*delete []enemy_arr;*/
+	delete smartenemy;
  }
 
 void Game::FillBlocks(int k) //ф-я заполнения массива данными
@@ -162,10 +163,11 @@ void Game::PlayerLeft()
 }
 void Game::randomEnemyArrMove()
 {
-	for (int i = 0; i < enemyCount; i++)
-	{
-		enemy_arr[i]->Step();
-	}
+	//for (int i = 0; i < enemyCount; i++)
+	//{
+	//	enemy_arr[i]->Step();
+	//}
+	smartenemy->Step();
 	ShowArray();
 }
 bool Game::isGameOver()
