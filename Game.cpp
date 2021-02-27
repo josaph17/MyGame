@@ -1,3 +1,5 @@
+/*создать food (3 шт, если все съел - победил) точки другого цвета(объекты которые съедает игрок ) и счетчик очков, таймер сколько ты продержался*/
+//Режим невидимки для врагов
 #include <windows.h> // для цвета
 #include <iostream>
 #include <iomanip> //для setw
@@ -28,11 +30,10 @@ public:
 	bool isGameOver();
 	void KillEnemy();
  private:
-	Matrix* board;
+	Matrix* board;  
 	Player* player;
-	/*Enemy** enemy_arr;*/
+	Enemy** enemy_arr;
 	int enemyCount;
-	SmartEnemy* smartenemy;
 };
 
 void set_cursor(int x = 0, int y = 0)
@@ -52,26 +53,24 @@ Game::Game(int _rows, int _cols) //параметры в конструктор�
 	player = new Player(board); /*при помощи оператора new - создаём объекты,
 	а при помощи оператора присваивания - инициализируем переменные (указатели) player и enemy*/
 	enemyCount = 10;
-	//enemy_arr = new Enemy*[enemyCount]; 	//enemy /*Динамическое создание массива. Каждый эл-т массива - указатель на динамический объект*/
+	enemy_arr = new Enemy*[enemyCount]; 	//enemy /*Динамическое создание массива. Каждый эл-т массива - указатель на динамический объект*/
 	///*Есть класс Enemy. Enemy* - это тип "указатель на объект класса Enemy".
 	//Enemy** - это "указатель на указатель на объект класса Enemy" (или "указатель на массив указателей на класс Enemy").*/
-	//for(int i = 0; i < enemyCount; i++)
-	//{
-	//	enemy_arr[i] = new Enemy(board, player);
-	//}
-	smartenemy = new SmartEnemy(board, player);
+	for(int i = 0; i < enemyCount; i++)
+	{
+		enemy_arr[i] = new SmartEnemy(board, player);
+	}
 }
 
 Game::~Game() //полность удаляем нашу ОП после того как поработаем с нашим массивом и он нам станет ненужен
 {
 	delete board;
 	delete player;
-	//for (int i = 0; i < enemyCount; i++)
-	//{
-	//	delete enemy_arr[i];
-	//}
+	for (int i = 0; i < enemyCount; i++)
+	{
+		delete enemy_arr[i];
+	}
 	/*delete []enemy_arr;*/
-	delete smartenemy;
  }
 
 void Game::FillBlocks(int k) //ф-я заполнения массива данными
@@ -163,11 +162,12 @@ void Game::PlayerLeft()
 }
 void Game::randomEnemyArrMove()
 {
-	//for (int i = 0; i < enemyCount; i++)
-	//{
-	//	enemy_arr[i]->Step();
-	//}
-	smartenemy->Step();
+	for (int i = 0; i < enemyCount; i++)
+	{
+		enemy_arr[i]->Step(); /*это ф-я фирт поэтом у будет вызываться из реально созданного объекта*/
+	}
+	/*smartenemy->Step();
+	supersmartenemy->Step();*/
 	ShowArray();
 }
 bool Game::isGameOver()
@@ -185,13 +185,13 @@ void main()
 	srand((unsigned int)time(NULL)); // только здесь 1 раз , последовательность меняется
 	setlocale(LC_ALL, "");
 	//int rows = 20, cols = 30, k = 10, pattern = 2;
-	Game* game = new Game(20, 20); //было (20, 30)
+	Game* game = new Game(24, 38); //было (20, 30)
 	int** arr = NULL; //чтобы создать двумерный динамический массив, создаем указатель на массив указателей
 	//cout << "Введите количество строк и столбцов и число единиц (не равное размеру матрицы - 2): " << endl;
 	//cin >> rows >> cols >> k; 
 	bool escape_pressed = false; //для выхода их программы
 	//arr = CreateArray(rows, cols);
-	game->FillBlocks(100); //параметр k - преграда
+	game->FillBlocks(25); //параметр k - преграда
 	for (int i = 1; (!escape_pressed) /*&& (!game->isGameOver())*/; i++)
 	{
 		Sleep(70);
