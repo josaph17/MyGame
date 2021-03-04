@@ -11,6 +11,7 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "SmartEnemy.h"
+#include "Food.h"
 
 using namespace std;
 
@@ -30,10 +31,12 @@ public:
 	bool isGameOver();
 	void KillEnemy();
  private:
+	Food** food_arr;
 	Matrix* board;  
 	Player* player;
 	Enemy** enemy_arr;
 	int enemyCount;
+	int foodCount;
 };
 
 void set_cursor(int x = 0, int y = 0)
@@ -60,6 +63,12 @@ Game::Game(int _rows, int _cols) //параметры в конструктор�
 	{
 		enemy_arr[i] = new SmartEnemy(board, player);
 	}
+	foodCount = 3;
+	food_arr = new Food*[foodCount];
+	for (int i = 0; i < foodCount; i++)
+	{
+		food_arr[i] = new Food(board);
+	}
 }
 
 Game::~Game() //полность удаляем нашу ОП после того как поработаем с нашим массивом и он нам станет ненужен
@@ -69,6 +78,10 @@ Game::~Game() //полность удаляем нашу ОП после тог�
 	for (int i = 0; i < enemyCount; i++)
 	{
 		delete enemy_arr[i];
+	}
+	for (int i = 0; i < foodCount; i++)
+	{
+		delete food_arr[i];
 	}
 	/*delete []enemy_arr;*/
  }
@@ -120,6 +133,11 @@ void Game::ShowArray() //вывод массива
 			{
 				SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_INTENSITY); //белый
 				cout << "()";
+			}
+			if (board->Get(i, j) == 3) /// еда
+			{
+				SetConsoleTextAttribute(console, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY); //оранжевый
+				cout << "et";
 			}
 			if (board->Get(i, j) == 7) ///
 			{
